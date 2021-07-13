@@ -30,7 +30,6 @@ class _DetailFormState extends State<DetailForm> {
   }
 
   void initState() {
-    print(widget.statusController.text);
     setState(() {
       _flag = widget.statusController.text.toLowerCase() == "true";
     });

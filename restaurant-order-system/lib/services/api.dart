@@ -368,4 +368,31 @@ class MyApi {
       return false;
     }
   }
+
+  Future<bool> createItem(Item item) async {
+    String token = await LocalStorage.getAccessTokenFromStorage();
+    String url = _baseUrl + 'item/create';
+
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+      body: json.encode({
+        "categoryId": 1,
+        "description": item.description,
+        "img": item.img,
+        "isAvailable": item.available.toString(),
+        "name": item.name,
+        "price": item.price.toString()
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

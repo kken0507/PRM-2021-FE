@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:kiennt_restaurant/configs/size_config.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_detail.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
+import 'package:kiennt_restaurant/widgets/default_button.dart';
 
 //widgets
 import 'package:kiennt_restaurant/widgets/navbar.dart';
@@ -64,8 +66,56 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
     });
   }
 
+  bottom() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        vertical: getProportionateScreenWidth(15.0),
+        horizontal: getProportionateScreenWidth(30.0),
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(0, -15),
+            blurRadius: 20,
+            color: Color(0xFFDADADA).withOpacity(0.15),
+          )
+        ],
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: SizedBox(
+                width: getProportionateScreenWidth(190.0),
+                child: DefaultButton(
+                  color: ThemeColors.primary,
+                  text: "Create new",
+                  press: () {
+                    Navigator.pushNamed(
+                            context, ItemDetailStaffScreen.routeName,)
+                        .then((value) => initializeList()
+                            .then((value) => _reloadList(searchValue)));
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return Scaffold(
         appBar: Navbar(
           title: "Menu",
@@ -85,7 +135,8 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
             );
           },
           itemCount: _listForDisplay.length,
-        ));
+        ),
+        bottomNavigationBar: bottom(),);
   }
 
   void dismissSlidableItem(
@@ -117,13 +168,15 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
       available: _listForDisplay[index].available,
       onTap: () {
         Navigator.pushNamed(context, ItemDetailStaffScreen.routeName,
-            arguments: Item(
-                id: _listForDisplay[index].id,
-                name: _listForDisplay[index].name,
-                description: _listForDisplay[index].description,
-                img: _listForDisplay[index].img,
-                price: _listForDisplay[index].price,
-                available: _listForDisplay[index].available)).then((value) => initializeList().then((value) => _reloadList(searchValue)));
+                arguments: Item(
+                    id: _listForDisplay[index].id,
+                    name: _listForDisplay[index].name,
+                    description: _listForDisplay[index].description,
+                    img: _listForDisplay[index].img,
+                    price: _listForDisplay[index].price,
+                    available: _listForDisplay[index].available))
+            .then((value) =>
+                initializeList().then((value) => _reloadList(searchValue)));
       },
     );
   }

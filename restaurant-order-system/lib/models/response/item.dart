@@ -27,7 +27,7 @@ class ItemResponse {
     this._name = item['name'];
     this._price = item['price'];
     this._description = item['description'];
-    this._available = item['available'];
+    this._available = item['isAvailable'];
     this._img = item['img'];
   }
 
@@ -51,7 +51,7 @@ class ItemResponse {
     _name = json['name'];
     _price = json['price'];
     _description = json['description'];
-    _available = json['available'];
+    _available = json['isAvailable'];
     _img = json['img'];
   }
 
@@ -62,7 +62,7 @@ class ItemResponse {
     data['name'] = this._name;
     data['price'] = this._price;
     data['description'] = this._description;
-    data['available'] = this._available;
+    data['isAvailable'] = this._available;
     data['img'] = this._img;
     return data;
   }

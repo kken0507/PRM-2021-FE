@@ -10,6 +10,7 @@ import 'package:kiennt_restaurant/screens/confirmed_orders/sessions_with_confirm
 import 'package:kiennt_restaurant/screens/menu/details/item_detail.dart';
 import 'package:kiennt_restaurant/screens/menu/dispatcher.dart';
 import 'package:kiennt_restaurant/screens/menu/start_session.dart';
+import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_detail.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/menu_staff_side.dart';
 
 // screens
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
                 AfterCheckoutScreen(),
             CheckoutStaffScreen.routeName: (BuildContext context) => CheckoutStaffScreen(),
             MenuStaffSideScreen.routeName: (BuildContext context) => MenuStaffSideScreen(),
+            ItemDetailStaffScreen.routeName: (BuildContext context) => ItemDetailStaffScreen(),
           }),
     );
   }

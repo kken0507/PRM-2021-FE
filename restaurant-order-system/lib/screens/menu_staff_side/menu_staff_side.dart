@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
+import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_detail.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
 
@@ -102,7 +103,6 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
                               MyUtil.showSnackBar(context, 'Status changed'))),
                     }
                 });
-
         break;
     }
   }
@@ -115,6 +115,16 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
       img: _listForDisplay[index].img,
       price: _listForDisplay[index].price,
       available: _listForDisplay[index].available,
+      onTap: () {
+        Navigator.pushNamed(context, ItemDetailStaffScreen.routeName,
+            arguments: Item(
+                id: _listForDisplay[index].id,
+                name: _listForDisplay[index].name,
+                description: _listForDisplay[index].description,
+                img: _listForDisplay[index].img,
+                price: _listForDisplay[index].price,
+                available: _listForDisplay[index].available)).then((value) => initializeList().then((value) => _reloadList(searchValue)));
+      },
     );
   }
 }

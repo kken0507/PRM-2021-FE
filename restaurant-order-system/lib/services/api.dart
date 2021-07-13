@@ -34,9 +34,13 @@ class MyApi {
   Future<List<Item>> searchItems(String name, String status) async {
     String token = await LocalStorage.getAccessTokenFromStorage();
     String url = _baseUrl + 'item/searchToList';
-    url += ((name != null && name.isNotEmpty) || (status != null && status.isNotEmpty))? "/" : "";
+    url += ((name != null && name.isNotEmpty) ||
+            (status != null && status.isNotEmpty))
+        ? "/"
+        : "";
     url += (name != null && name.isNotEmpty) ? "?name=" + name : "";
-    url += (status != null && status.isNotEmpty) ? "?isAvailable=" + status : "";
+    url +=
+        (status != null && status.isNotEmpty) ? "?isAvailable=" + status : "";
     List<Item> result = [];
 
     var response =
@@ -317,14 +321,16 @@ class MyApi {
     return null;
   }
 
-Future<bool> changeStatusItem(int itemId, bool status) async {
+  Future<bool> changeStatusItem(int itemId, bool status) async {
     String token = await LocalStorage.getAccessTokenFromStorage();
     String url = _baseUrl + 'item/update/' + itemId.toString();
 
-
     var response = await http.post(
       url,
-      headers: {'Authorization': 'Bearer $token', "Content-Type": "application/json"},
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
       body: json.encode({
         'isAvailable': status.toString(),
       }),
@@ -337,5 +343,29 @@ Future<bool> changeStatusItem(int itemId, bool status) async {
     }
   }
 
+  Future<bool> updateItem(int itemId, Item item) async {
+    String token = await LocalStorage.getAccessTokenFromStorage();
+    String url = _baseUrl + 'item/update/' + itemId.toString();
 
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+      body: json.encode({
+        "description": item.description,
+        "img": item.img,
+        "isAvailable": item.available.toString(),
+        "name": item.name,
+        "price": item.price.toString()
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

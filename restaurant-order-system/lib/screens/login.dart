@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/landing.dart';
-import 'package:kiennt_restaurant/models/auth.dart';
 import 'package:kiennt_restaurant/models/login_user.dart';
 
 import 'package:kiennt_restaurant/models/api_err.dart';
 import 'package:kiennt_restaurant/models/api_response.dart';
-import 'package:kiennt_restaurant/models/user.dart';
 
 import 'package:kiennt_restaurant/services/auth.dart';
 
@@ -21,7 +19,6 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 
   static String routeName = "/login";
-
 }
 
 class _LoginState extends State<Login> {
@@ -43,7 +40,10 @@ class _LoginState extends State<Login> {
 
   void _redirectToHome() async {
     Navigator.pushNamedAndRemoveUntil(
-        context, Landing.routeName, ModalRoute.withName(Landing.routeName),);
+      context,
+      Landing.routeName,
+      ModalRoute.withName(Landing.routeName),
+    );
   }
 
   void _handleSubmitted() async {
@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
                       fit: BoxFit.cover)),
             ),
             SafeArea(
-              child: ListView(shrinkWrap: true,children: [
+              child: ListView(shrinkWrap: true, children: [
                 Padding(
                   padding: const EdgeInsets.only(
                       top: 16, left: 24.0, right: 24.0, bottom: 32),

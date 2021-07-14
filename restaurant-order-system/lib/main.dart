@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/models/shopping_cart.dart';
+import 'package:kiennt_restaurant/screens/account_management/account_management.dart';
+import 'package:kiennt_restaurant/screens/account_management/details/account_detail.dart';
 import 'package:kiennt_restaurant/screens/cart/cart_screen.dart';
 import 'package:kiennt_restaurant/screens/checkout/after_checkout.dart';
 import 'package:kiennt_restaurant/screens/checkout/checkout.dart';
@@ -87,6 +89,8 @@ class MyApp extends StatelessWidget {
             CheckoutStaffScreen.routeName: (BuildContext context) => CheckoutStaffScreen(),
             MenuStaffSideScreen.routeName: (BuildContext context) => MenuStaffSideScreen(),
             ItemDetailStaffScreen.routeName: (BuildContext context) => ItemDetailStaffScreen(),
+            AccountManagementScreen.routeName: (BuildContext context) => AccountManagementScreen(),
+            AccountDetailScreen.routeName: (BuildContext context) => AccountDetailScreen(),
           }),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kiennt_restaurant/constants/my_const.dart';
 import 'package:kiennt_restaurant/models/response/session.dart';
+import 'package:kiennt_restaurant/screens/account_management/account_management.dart';
 import 'package:kiennt_restaurant/screens/checkout/checkout.dart';
 import 'package:kiennt_restaurant/screens/checkout_staff_side/checkout_staff_side.dart';
 import 'package:kiennt_restaurant/screens/confirmed_orders/sessions_with_confirmed_orders.dart';
@@ -108,8 +110,8 @@ class ArgonDrawer extends StatelessWidget {
               if (session == null ||
                   (session != null && session.status == "COMPLETED")) {
                 await LocalStorage.deleteUserInfo();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, Login.routeName, ModalRoute.withName(Login.routeName));
+                Navigator.pushNamedAndRemoveUntil(context, Login.routeName,
+                    ModalRoute.withName(Login.routeName));
               }
             },
         iconColor: ThemeColors.muted,
@@ -151,12 +153,14 @@ class ArgonDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var roleList1 = <String>["MANAGER", "STAFF"];
-    var roleList2 = <String>["CUSTOMER"];
+    var roleList1 = <String>[MY_ROLES.MANAGER.toString().split('.').last, MY_ROLES.STAFF.toString().split('.').last];
+    var roleList2 = <String>[MY_ROLES.CUSTOMER.toString().split('.').last];
 
     var contentStaffList = <Widget>[
       _buildChild(
           context, "Menu", MenuStaffSideScreen.routeName, Icons.menu_book),
+      _buildChild(
+          context, "Account", AccountManagementScreen.routeName, Icons.person),
       _buildChild(context, "Pending", PendingOrdersScreen.routeName,
           Icons.hourglass_bottom),
       _buildChild(context, "Confirmed", ConfirmedOrdersScreen.routeName,

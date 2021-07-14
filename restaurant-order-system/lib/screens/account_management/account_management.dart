@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/configs/size_config.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
+import 'package:kiennt_restaurant/constants/my_const.dart';
+import 'package:kiennt_restaurant/models/common/account.dart';
 import 'package:kiennt_restaurant/models/item.dart';
+import 'package:kiennt_restaurant/screens/account_management/details/account_detail.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_detail.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
@@ -15,19 +19,20 @@ import 'package:kiennt_restaurant/widgets/navbar.dart';
 import 'package:kiennt_restaurant/widgets/drawer.dart';
 import 'package:kiennt_restaurant/widgets/slidable_widget.dart';
 
-class MenuStaffSideScreen extends StatefulWidget {
-  static String routeName = "/menu-staff-screen";
+class AccountManagementScreen extends StatefulWidget {
+  static String routeName = "/account-management";
 
   @override
-  _MenuStaffSideScreenState createState() => _MenuStaffSideScreenState();
+  _AccountManagementScreenState createState() =>
+      _AccountManagementScreenState();
 }
 
-class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
+class _AccountManagementScreenState extends State<AccountManagementScreen> {
 // final GlobalKey _scaffoldKey = new GlobalKey();
   final TextEditingController _controller = new TextEditingController();
   String searchValue = "";
-  List<Item> _list = [];
-  List<Item> _listForDisplay = [];
+  List<Account> _list = [];
+  List<Account> _listForDisplay = [];
 
   @override
   void initState() {
@@ -36,7 +41,7 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
   }
 
   Future<void> initializeList() async {
-    _list = await MyApi().getItems();
+    _list = await MyApi().getAccount();
     if (_list.isNotEmpty) {
       setState(() {
         _listForDisplay = _list;
@@ -47,23 +52,29 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
   void _handleSearch(str) {
     searchValue = str;
     searchValue = searchValue.toLowerCase();
+    Set<Account> tmp = {};
+    tmp.addAll(_list.where((account) {
+      var s = account.fullname.toLowerCase();
+      return s.contains(searchValue);
+    }).toList());
+    tmp.addAll(_list.where((account) {
+      var s = account.email.toLowerCase();
+      return s.contains(searchValue);
+    }).toList());
     setState(() {
-      _listForDisplay = _list.where((item) {
-        var title = item.name.toLowerCase();
-        return title.contains(searchValue);
-      }).toList();
+      _listForDisplay = tmp.toList();
     });
   }
 
   Future<void> _reloadList(str) async {
     searchValue = str;
     searchValue = searchValue.toLowerCase();
-    setState(() {
-      _listForDisplay = _list.where((item) {
-        var title = item.name.toLowerCase();
-        return title.contains(searchValue);
-      }).toList();
-    });
+    // setState(() {
+    //   _listForDisplay = _list.where((item) {
+    //     var title = item.name.toLowerCase();
+    //     return title.contains(searchValue);
+    //   }).toList();
+    // });
   }
 
   bottom() {
@@ -99,9 +110,10 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
                   text: "Create new",
                   press: () {
                     Navigator.pushNamed(
-                            context, ItemDetailStaffScreen.routeName,)
-                        .then((value) => initializeList()
-                            .then((value) => _reloadList(searchValue)));
+                      context,
+                      AccountDetailScreen.routeName,
+                    ).then((value) => initializeList()
+                        .then((value) => _reloadList(searchValue)));
                   },
                 ),
               ),
@@ -117,44 +129,51 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
     SizeConfig().init(context);
 
     return Scaffold(
-        appBar: Navbar(
-          title: "Menu",
-          searchBar: true,
-        placeholder: "Search by name...",
-          rightOptionCart: false,
-          searchOnChanged: _handleSearch,
-        ),
-        backgroundColor: ThemeColors.bgColorScreen,
-        // key: _scaffoldKey,
-        drawer: ArgonDrawer(currentPage: "Menu"),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return SlidableWidget(
-              child: _listItem(index),
-              onDismissed: (action) =>
-                  {dismissSlidableItem(context, index, action)},
-            );
-          },
-          itemCount: _listForDisplay.length,
-        ),
-        bottomNavigationBar: bottom(),);
+      appBar: Navbar(
+        title: "Account",
+        searchBar: true,
+        placeholder: "Search by fullname or email...",
+        rightOptionCart: false,
+        searchOnChanged: _handleSearch,
+      ),
+      backgroundColor: ThemeColors.bgColorScreen,
+      // key: _scaffoldKey,
+      drawer: ArgonDrawer(currentPage: "Account"),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return SlidableWidget(
+            child: _listItem(index),
+            onDismissed: (action) =>
+                {dismissSlidableItem(context, index, action)},
+          );
+        },
+        itemCount: _listForDisplay.length,
+      ),
+      bottomNavigationBar: bottom(),
+    );
   }
 
   void dismissSlidableItem(
       BuildContext context, int index, SlidableAction action) {
     switch (action) {
       case SlidableAction.changeStatus:
-        MyApi()
-            .changeStatusItem(
-                _listForDisplay[index].id, !_listForDisplay[index].available)
-            .then((value) => {
-                  if (value)
-                    {
-                      initializeList().then((value) => _reloadList(searchValue)
-                          .then((value) =>
-                              MyUtil.showSnackBar(context, 'Status changed'))),
-                    }
-                });
+        if (_listForDisplay[index].role !=
+            MY_ROLES.MANAGER.toString().split(".").last) {
+          MyApi()
+              .changeStatusAccount(
+                  _listForDisplay[index].id, !_listForDisplay[index].active)
+              .then((value) => {
+                    if (value)
+                      {
+                        initializeList().then((value) =>
+                            _reloadList(searchValue).then((value) =>
+                                MyUtil.showSnackBar(
+                                    context, 'Status changed'))),
+                      }
+                  });
+        } else {
+          MyUtil.showSnackBar(context, 'Can not change Manager\'s status');
+        }
         break;
     }
   }
@@ -162,20 +181,17 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
   _listItem(index) {
     return ThisCardItem(
       id: _listForDisplay[index].id,
-      name: _listForDisplay[index].name,
-      description: _listForDisplay[index].description,
-      img: _listForDisplay[index].img,
-      price: _listForDisplay[index].price,
-      available: _listForDisplay[index].available,
+      fullname: _listForDisplay[index].fullname,
+      gender: _listForDisplay[index].gender,
+      avatar: _listForDisplay[index].avatar,
+      active: _listForDisplay[index].active,
+      dob: _listForDisplay[index].dob,
+      email: _listForDisplay[index].email,
+      phone: _listForDisplay[index].phone,
+      role: _listForDisplay[index].role,
       onTap: () {
-        Navigator.pushNamed(context, ItemDetailStaffScreen.routeName,
-                arguments: Item(
-                    id: _listForDisplay[index].id,
-                    name: _listForDisplay[index].name,
-                    description: _listForDisplay[index].description,
-                    img: _listForDisplay[index].img,
-                    price: _listForDisplay[index].price,
-                    available: _listForDisplay[index].available))
+        Navigator.pushNamed(context, AccountDetailScreen.routeName,
+                arguments: _listForDisplay[index])
             .then((value) =>
                 initializeList().then((value) => _reloadList(searchValue)));
       },
@@ -185,21 +201,27 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
 
 class ThisCardItem extends StatelessWidget {
   ThisCardItem(
-      {this.name = "Placeholder Title",
-      this.description = "",
-      this.price = 0,
+      {this.fullname = "Placeholder Title",
+      this.gender = "M",
+      this.email = "example@example.com",
       this.id = 0,
-      this.img = "https://via.placeholder.com/200",
-      this.available = true,
+      this.avatar = "https://via.placeholder.com/200",
+      this.active = true,
+      this.role = "EXAMPLE",
+      this.phone = "0909000333",
+      this.dob,
       this.onTap = defaultFunc});
 
   final int id;
-  final String img;
+  final String email;
+  final String role;
+  final String phone;
+  final String avatar;
+  final String fullname;
+  final String gender;
+  final bool active;
+  final DateTime dob;
   final Function onTap;
-  final String name;
-  final String description;
-  final double price;
-  final bool available;
 
   static void defaultFunc() {
     print("the function works!");
@@ -225,7 +247,7 @@ class ThisCardItem extends StatelessWidget {
                               topLeft: Radius.circular(6.0),
                               bottomLeft: Radius.circular(6.0)),
                           image: DecorationImage(
-                            image: NetworkImage(img),
+                            image: NetworkImage(avatar),
                             fit: BoxFit.cover,
                           ))),
                 ),
@@ -240,18 +262,27 @@ class ThisCardItem extends StatelessWidget {
                           Text("ID: " + id.toString(),
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 13)),
-                          Text(name,
+                          Text(fullname,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 13)),
-                          Text("[" + description + "]",
+                          Text("Gender: " + gender,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
-                          Text(price.toString() + "VND",
+                          Text(email,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
-                          Text(available ? "Available" : "Not available",
+                          Text(phone,
                               style: TextStyle(
-                                  color: available
+                                  color: ThemeColors.header, fontSize: 11)),
+                          Text(role,
+                              style: TextStyle(
+                                  color: ThemeColors.header, fontSize: 11)),
+                          Text("DOB: " + dob.toString().substring(0, 10),
+                              style: TextStyle(
+                                  color: ThemeColors.header, fontSize: 11)),
+                          Text(active ? "Active" : "Deactivated",
+                              style: TextStyle(
+                                  color: active
                                       ? ThemeColors.success
                                       : ThemeColors.error,
                                   fontSize: 11)),

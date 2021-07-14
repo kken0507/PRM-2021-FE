@@ -30,8 +30,10 @@ class _DetailFormState extends State<DetailForm> {
   }
 
   void initState() {
-    setState(() {
-      _flag = widget.statusController.text.toLowerCase() == "true";
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        _flag = widget.statusController.text.toLowerCase() == "true";
+      });
     });
     super.initState();
   }
@@ -91,7 +93,7 @@ class _DetailFormState extends State<DetailForm> {
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
                     border: UnderlineInputBorder(),
-                    labelText: 'Description',
+                    labelText: 'Description:',
                   ),
                 ),
               ),

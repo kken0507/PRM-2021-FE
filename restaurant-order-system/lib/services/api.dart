@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:kiennt_restaurant/models/common/account.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/models/request/order_detail.dart';
 import 'package:kiennt_restaurant/models/response/bill.dart';
@@ -8,6 +9,7 @@ import 'package:kiennt_restaurant/models/response/open_session.dart';
 import 'package:kiennt_restaurant/models/response/session.dart';
 import 'package:kiennt_restaurant/models/shopping_cart.dart';
 import 'package:kiennt_restaurant/services/storage/local_storage.dart';
+import 'package:kiennt_restaurant/util/my_util.dart';
 
 class MyApi {
   String _baseUrl = "http://192.168.2.174:8091/";
@@ -386,6 +388,106 @@ class MyApi {
         "isAvailable": item.available.toString(),
         "name": item.name,
         "price": item.price.toString()
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<List<Account>> getAccount() async {
+    String token = await LocalStorage.getAccessTokenFromStorage();
+    String url = _baseUrl + 'account/all';
+    List<Account> result = [];
+
+    var response =
+        await http.get(url, headers: {'Authorization': 'Bearer $token'});
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonList = json.decode(response.body);
+      for (var i = 0; i < jsonList.length; i++) {
+        Account tmp = Account.fromJson(json.encode(jsonList[i]));
+        result.add(tmp);
+      }
+      return result;
+    }
+    return List.empty();
+  }
+
+  Future<bool> changeStatusAccount(int accId, bool status) async {
+    String token = await LocalStorage.getAccessTokenFromStorage();
+    String url = _baseUrl + 'account/update/' + accId.toString();
+
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+      body: json.encode({
+        "isActive": status.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> updateAccount(int accId, Account acc) async {
+    String token = await LocalStorage.getAccessTokenFromStorage();
+    String url = _baseUrl + 'account/update/' + accId.toString();
+
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+      body: json.encode({
+        "avatar": acc.avatar,
+        "dob": acc.dob.toString().substring(0,10),
+        "email": acc.email,
+        "fullname": acc.fullname,
+        "gender": acc.gender,
+        "isActive": acc.active.toString(),
+        "phone": acc.phone,
+        "role": acc.role
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> createAccount(Account acc, String password) async {
+    String token = await LocalStorage.getAccessTokenFromStorage();
+    String url = _baseUrl + 'account/create';
+
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        "Content-Type": "application/json"
+      },
+      body: json.encode({
+        "password": password,
+        "avatar": acc.avatar,
+        "dob": acc.dob.toString().substring(0,10),
+        "email": acc.email,
+        "fullname": acc.fullname,
+        "gender": acc.gender,
+        "isActive": acc.active.toString(),
+        "phone": acc.phone,
+        "role": acc.role
       }),
     );
 

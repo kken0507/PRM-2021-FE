@@ -140,6 +140,7 @@ class _MenuScreenState extends State<MenuScreen> {
         appBar: Navbar(
           title: "Menu",
           searchBar: true,
+          placeholder: "Search by name...",
           searchOnChanged: (str) {
             String tmp = str;
             tmp = tmp.toLowerCase();

@@ -65,7 +65,10 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
         item.description = _descriptionController.text;
         item.available = _statusController.text.toLowerCase() == "true";
         MyApi().updateItem(item.id, item).then((value) => {
-              if (value) {MyUtil.showSnackBar(context, 'Item updated')}
+              if (value)
+                {MyUtil.showSnackBar(context, 'Item updated')}
+              else
+                {MyUtil.showSnackBar(context, 'Update item failed')}
             });
       } else {
         Item newItem = new Item(
@@ -76,7 +79,13 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
             name: _nameController.text,
             price: double.parse(_priceController.text));
         MyApi().createItem(newItem).then((value) => {
-              if (value) {Navigator.pop(context), MyUtil.showSnackBar(context, 'Item created')}
+              if (value)
+                {
+                  Navigator.pop(context),
+                  MyUtil.showSnackBar(context, 'Item created')
+                }
+              else
+                {MyUtil.showSnackBar(context, 'Create item failed')}
             });
       }
     } else {

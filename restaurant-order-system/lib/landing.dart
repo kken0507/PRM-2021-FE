@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiennt_restaurant/constants/my_const.dart';
 import 'package:kiennt_restaurant/screens/login.dart';
 import 'package:kiennt_restaurant/screens/menu/dispatcher.dart';
 import 'package:kiennt_restaurant/screens/pending_orders/sessions_with_pending_orders.dart';
@@ -31,7 +32,7 @@ class _LandingState extends State<Landing> {
       Navigator.pushNamedAndRemoveUntil(
           context, Login.routeName, ModalRoute.withName(Login.routeName));
     } else {
-      if (_role == "CUSTOMER") {
+      if (_role == MY_ROLES.CUSTOMER.toString().split('.').last) {
         Navigator.pushNamedAndRemoveUntil(context, MenuDispatcher.routeName,
             ModalRoute.withName(MenuDispatcher.routeName));
       }

@@ -19,8 +19,8 @@ class ShoppingCart with ChangeNotifier {
 
   void reduce(Item item) {
     int itemIndex = _list.indexWhere((element) => element.item.id == item.id);
-    if (itemIndex > -1) {
-      if (_list[itemIndex].numOfItem > 0) {
+    if (itemIndex >= 0) {
+      if (_list[itemIndex].numOfItem >= 2) {
         _list[itemIndex] =
             CartItem(item: item, numOfItem: _list[itemIndex].numOfItem - 1);
         notifyListeners();

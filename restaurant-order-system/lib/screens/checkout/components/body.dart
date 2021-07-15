@@ -93,7 +93,7 @@ class CardOrderDetail extends StatelessWidget {
                   return Container(
                     height: 50,
                     child: Text(
-                      '${index + 1} - ${bill.items[index].item.name} X ${bill.items[index].quantity}',
+                      '${index + 1} - ${bill.items[index].item.name} X ${bill.items[index].quantity} = ${bill.items[index].price}',
                       style: TextStyle(fontSize: 21),
                     ),
                   );

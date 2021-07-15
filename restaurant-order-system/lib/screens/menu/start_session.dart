@@ -53,8 +53,7 @@ class StartSessionScreen extends StatelessWidget {
               //   },
               //   child: Text("Start"),
               // ),
-
-              _card(context),
+              Expanded(child: _card(context)),
             ],
           ),
         ));
@@ -68,11 +67,13 @@ Widget _card(context) {
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(6.0))),
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-            'Press to start new session',
-            style: TextStyle(fontSize: 25),
-          ),
+          'Press to start new session',
+          style: TextStyle(fontSize: 25),
+        ),
         Center(
           child: SizedBox(
             width: getProportionateScreenWidth(190.0),

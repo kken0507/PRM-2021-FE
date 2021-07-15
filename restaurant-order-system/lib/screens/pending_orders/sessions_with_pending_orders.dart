@@ -24,25 +24,25 @@ class PendingOrdersScreen extends StatefulWidget {
 class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
   // final GlobalKey _scaffoldKey = new GlobalKey();
 
-  bool _isSearching;
   List<SessionResponse> _list = [];
   List<SessionResponse> _listForDisplay = [];
 
   @override
   void initState() {
     super.initState();
-    _isSearching = false;
     initializeList();
   }
 
   Future<void> initializeList() async {
     _list = await MyApi().getSessionOrdersByStatus('PENDING');
-    if (_list.isNotEmpty) {
-      setState(() {
-        _listForDisplay = _list;
-        _isSearching = false;
-      });
-    }
+    // if (_list.isNotEmpty) {
+    //   setState(() {
+    //     _listForDisplay = _list;
+    //   });
+    // }
+    setState(() {
+      _listForDisplay = _list;
+    });
   }
 
   FutureOr onGoBack(dynamic value) {

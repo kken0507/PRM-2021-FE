@@ -35,11 +35,14 @@ class _ConfirmedOrdersScreenState extends State<ConfirmedOrdersScreen> {
 
   Future<void> initializeList() async {
     _list = await MyApi().getSessionOrdersByStatus('CONFIRMED');
-    if (_list.isNotEmpty) {
-      setState(() {
-        _listForDisplay = _list;
-      });
-    }
+    // if (_list.isNotEmpty) {
+    //   setState(() {
+    //     _listForDisplay = _list;
+    //   });
+    // }
+    setState(() {
+      _listForDisplay = _list;
+    });
   }
 
   FutureOr onGoBack(dynamic value) {

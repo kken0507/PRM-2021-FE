@@ -47,13 +47,16 @@ class SettingScreen extends StatelessWidget {
     if (await LocalStorage.getSessionFromStorage() != null) {
       showInSnackBar('Position can\'t changed because session is opening');
     } else {
-      Pattern pattern =
-          r"\s+";
+      Pattern pattern = r"\s+";
       RegExp regex = new RegExp(pattern);
+      var validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
+
       if (text.trim().isEmpty) {
         showInSnackBar('Position can\'t be empty');
       } else if (text.contains(regex)) {
         showInSnackBar('Position can\'t contain whitespaces');
+      } else if (!validCharacters.hasMatch(text)) {
+        showInSnackBar('Only alphanumeric allowed');
       } else {
         showInSnackBar('Saved');
         LocalStorage.savePosition(text);

@@ -107,7 +107,7 @@ class MyApi {
     return false;
   }
 
-  Future<bool> closeSession(sessionId) async {
+  Future<dynamic> closeSession(sessionId) async {
     String token = await LocalStorage.getAccessTokenFromStorage();
     String url = _baseUrl + 'session/closeSession/' + sessionId.toString();
 
@@ -119,7 +119,9 @@ class MyApi {
     if (response.statusCode == 200) {
       return true;
     } else {
-      return false;
+      print(jsonDecode(response.body)["message"]);
+      // return false;
+      return jsonDecode(response.body)["message"].toString();
     }
   }
 

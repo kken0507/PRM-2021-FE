@@ -55,12 +55,12 @@ class Bottom extends StatelessWidget {
                         DialogUtil().confirmDialog(context, () async {
                           var isSuccess =
                               await MyApi().closeSession(bill.session.sessionId);
-                          if (isSuccess) {
+                          if (isSuccess is bool && isSuccess) {
                             LocalStorage.deleteSesion();
                             Navigator.pushNamed(context, AfterCheckoutScreen.routeName, arguments: bill);
                           } else {
                             await DialogUtil().errorDialog(context, () {},
-                                "ERROR", "Failed to close session");
+                                "ERROR", isSuccess);
                           }
                         }, "Checkout?", "Do you want to checkout?");
                       }

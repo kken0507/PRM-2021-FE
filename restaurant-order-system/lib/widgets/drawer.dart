@@ -153,20 +153,19 @@ class ArgonDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var roleList1 = <String>[MY_ROLES.MANAGER.toString().split('.').last, MY_ROLES.STAFF.toString().split('.').last];
+    var roleList1 = <String>[MY_ROLES.STAFF.toString().split('.').last];
     var roleList2 = <String>[MY_ROLES.CUSTOMER.toString().split('.').last];
+    var roleList3 = <String>[MY_ROLES.MANAGER.toString().split('.').last];
 
     var contentStaffList = <Widget>[
-      _buildChild(
-          context, "Menu", MenuStaffSideScreen.routeName, Icons.menu_book),
-      _buildChild(
-          context, "Account", AccountManagementScreen.routeName, Icons.person),
       _buildChild(context, "Pending", PendingOrdersScreen.routeName,
           Icons.hourglass_bottom),
       _buildChild(context, "Confirmed", ConfirmedOrdersScreen.routeName,
           Icons.check_rounded),
       _buildChild(context, "Checkout Staff", CheckoutStaffScreen.routeName,
           Icons.camera),
+      _buildChild(
+          context, "Menu", MenuStaffSideScreen.routeName, Icons.menu_book),
     ];
 
     var contentCustomerList = <Widget>[
@@ -184,6 +183,19 @@ class ArgonDrawer extends StatelessWidget {
           CheckoutScreen.routeName,
           Icons.assignment_returned_outlined,
           LocalStorage.getSessionFromStorage()),
+    ];
+
+    var contentManagerList = <Widget>[
+      _buildChild(context, "Pending", PendingOrdersScreen.routeName,
+          Icons.hourglass_bottom),
+      _buildChild(context, "Confirmed", ConfirmedOrdersScreen.routeName,
+          Icons.check_rounded),
+      _buildChild(context, "Checkout Staff", CheckoutStaffScreen.routeName,
+          Icons.camera),
+      _buildChild(
+          context, "Menu", MenuStaffSideScreen.routeName, Icons.menu_book),
+      _buildChild(
+          context, "Account", AccountManagementScreen.routeName, Icons.person),
     ];
 
     return Drawer(
@@ -284,6 +296,7 @@ class ArgonDrawer extends StatelessWidget {
         // ),
         _buildListViewRole(contentStaffList, roleList1),
         _buildListViewRole(contentCustomerList, roleList2),
+        _buildListViewRole(contentManagerList, roleList3),
         Expanded(
           flex: 1,
           child: Container(

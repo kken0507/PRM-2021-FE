@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/configs/size_config.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
+import 'package:kiennt_restaurant/constants/my_const.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_detail.dart';
 import 'package:kiennt_restaurant/services/api.dart';
+import 'package:kiennt_restaurant/services/storage/local_storage.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
 import 'package:kiennt_restaurant/widgets/default_button.dart';
 
@@ -25,14 +27,25 @@ class MenuStaffSideScreen extends StatefulWidget {
 class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
 // final GlobalKey _scaffoldKey = new GlobalKey();
   final TextEditingController _controller = new TextEditingController();
-  String searchValue = "";
+  String _searchValue = "";
   List<Item> _list = [];
   List<Item> _listForDisplay = [];
+  String _curRole;
 
   @override
   void initState() {
     super.initState();
     initializeList();
+    getRole();
+  }
+
+  Future<void> getRole() async {
+    String s = await LocalStorage.getRoleFromStorage();
+    if (s != null) {
+      setState(() {
+        _curRole = s;
+      });
+    }
   }
 
   Future<void> initializeList() async {
@@ -45,71 +58,75 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
   }
 
   void _handleSearch(str) {
-    searchValue = str;
-    searchValue = searchValue.toLowerCase();
+    _searchValue = str;
+    _searchValue = _searchValue.toLowerCase();
     setState(() {
       _listForDisplay = _list.where((item) {
         var title = item.name.toLowerCase();
-        return title.contains(searchValue);
+        return title.contains(_searchValue);
       }).toList();
     });
   }
 
   Future<void> _reloadList(str) async {
-    searchValue = str;
-    searchValue = searchValue.toLowerCase();
+    _searchValue = str;
+    _searchValue = _searchValue.toLowerCase();
     setState(() {
       _listForDisplay = _list.where((item) {
         var title = item.name.toLowerCase();
-        return title.contains(searchValue);
+        return title.contains(_searchValue);
       }).toList();
     });
   }
 
   bottom() {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: getProportionateScreenWidth(15.0),
-        horizontal: getProportionateScreenWidth(30.0),
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+    if (_curRole == MY_ROLES.MANAGER.toString().split(".").last)
+      return Container(
+        padding: EdgeInsets.symmetric(
+          vertical: getProportionateScreenWidth(15.0),
+          horizontal: getProportionateScreenWidth(30.0),
         ),
-        boxShadow: [
-          BoxShadow(
-            offset: Offset(0, -15),
-            blurRadius: 20,
-            color: Color(0xFFDADADA).withOpacity(0.15),
-          )
-        ],
-      ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: SizedBox(
-                width: getProportionateScreenWidth(190.0),
-                child: DefaultButton(
-                  color: ThemeColors.primary,
-                  text: "Create new",
-                  press: () {
-                    Navigator.pushNamed(
-                            context, ItemDetailStaffScreen.routeName,)
-                        .then((value) => initializeList()
-                            .then((value) => _reloadList(searchValue)));
-                  },
-                ),
-              ),
-            ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(0, -15),
+              blurRadius: 20,
+              color: Color(0xFFDADADA).withOpacity(0.15),
+            )
           ],
         ),
-      ),
-    );
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: SizedBox(
+                  width: getProportionateScreenWidth(190.0),
+                  child: DefaultButton(
+                    color: ThemeColors.primary,
+                    text: "Create new",
+                    press: () {
+                      Navigator.pushNamed(
+                        context,
+                        ItemDetailStaffScreen.routeName,
+                      ).then((value) => initializeList()
+                          .then((value) => _reloadList(_searchValue)));
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    else
+      return null;
   }
 
   @override
@@ -117,27 +134,28 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
     SizeConfig().init(context);
 
     return Scaffold(
-        appBar: Navbar(
-          title: "Menu",
-          searchBar: true,
+      appBar: Navbar(
+        title: "Menu",
+        searchBar: true,
         placeholder: "Search by name...",
-          rightOptionCart: false,
-          searchOnChanged: _handleSearch,
-        ),
-        backgroundColor: ThemeColors.bgColorScreen,
-        // key: _scaffoldKey,
-        drawer: ArgonDrawer(currentPage: "Menu"),
-        body: ListView.builder(
-          itemBuilder: (context, index) {
-            return SlidableWidget(
-              child: _listItem(index),
-              onDismissed: (action) =>
-                  {dismissSlidableItem(context, index, action)},
-            );
-          },
-          itemCount: _listForDisplay.length,
-        ),
-        bottomNavigationBar: bottom(),);
+        rightOptionCart: false,
+        searchOnChanged: _handleSearch,
+      ),
+      backgroundColor: ThemeColors.bgColorScreen,
+      // key: _scaffoldKey,
+      drawer: ArgonDrawer(currentPage: "Menu"),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return SlidableWidget(
+            child: _listItem(index),
+            onDismissed: (action) =>
+                {dismissSlidableItem(context, index, action)},
+          );
+        },
+        itemCount: _listForDisplay.length,
+      ),
+      bottomNavigationBar: bottom(),
+    );
   }
 
   void dismissSlidableItem(
@@ -150,7 +168,7 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
             .then((value) => {
                   if (value)
                     {
-                      initializeList().then((value) => _reloadList(searchValue)
+                      initializeList().then((value) => _reloadList(_searchValue)
                           .then((value) =>
                               MyUtil.showSnackBar(context, 'Status changed'))),
                     }
@@ -168,16 +186,18 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
       price: _listForDisplay[index].price,
       available: _listForDisplay[index].available,
       onTap: () {
-        Navigator.pushNamed(context, ItemDetailStaffScreen.routeName,
-                arguments: Item(
-                    id: _listForDisplay[index].id,
-                    name: _listForDisplay[index].name,
-                    description: _listForDisplay[index].description,
-                    img: _listForDisplay[index].img,
-                    price: _listForDisplay[index].price,
-                    available: _listForDisplay[index].available))
-            .then((value) =>
-                initializeList().then((value) => _reloadList(searchValue)));
+        if (_curRole == MY_ROLES.MANAGER.toString().split(".").last) {
+          Navigator.pushNamed(context, ItemDetailStaffScreen.routeName,
+                  arguments: Item(
+                      id: _listForDisplay[index].id,
+                      name: _listForDisplay[index].name,
+                      description: _listForDisplay[index].description,
+                      img: _listForDisplay[index].img,
+                      price: _listForDisplay[index].price,
+                      available: _listForDisplay[index].available))
+              .then((value) =>
+                  initializeList().then((value) => _reloadList(_searchValue)));
+        }
       },
     );
   }

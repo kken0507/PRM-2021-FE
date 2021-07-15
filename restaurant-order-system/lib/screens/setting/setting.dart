@@ -43,15 +43,20 @@ class SettingScreen extends StatelessWidget {
   }
 
   void _handleSubmitted() async {
-    String text = _positionController.text;
+    String text = _positionController.text.trim();
     if (await LocalStorage.getSessionFromStorage() != null) {
       showInSnackBar('Position can\'t changed because session is opening');
     } else {
+      Pattern pattern =
+          r"\s+";
+      RegExp regex = new RegExp(pattern);
       if (text.trim().isEmpty) {
-        showInSnackBar('Position can\'t not be empty');
+        showInSnackBar('Position can\'t be empty');
+      } else if (text.contains(regex)) {
+        showInSnackBar('Position can\'t contain whitespaces');
       } else {
         showInSnackBar('Saved');
-        LocalStorage.savePosition(_positionController.text);
+        LocalStorage.savePosition(text);
       }
     }
   }
@@ -93,16 +98,18 @@ class SettingScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: SizedBox(
-                  width: getProportionateScreenWidth(190.0),
-                  child: DefaultButton(
-                    color: ThemeColors.primary,
-                    text: "Save",
-                    press: () {
-                      _handleSubmitted();
-                    },
-                  ),
-                ),),
+            Center(
+              child: SizedBox(
+                width: getProportionateScreenWidth(190.0),
+                child: DefaultButton(
+                  color: ThemeColors.primary,
+                  text: "Save",
+                  press: () {
+                    _handleSubmitted();
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -111,9 +118,9 @@ class SettingScreen extends StatelessWidget {
 
   Widget buildAppBar() {
     return Navbar(
-        title: "Setting",
-        backButton: true,
-        rightOptionCart: false,
-      );
+      title: "Setting",
+      backButton: true,
+      rightOptionCart: false,
+    );
   }
 }

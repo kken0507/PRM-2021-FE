@@ -46,13 +46,13 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       if (acc != null) {
-        acc.email = _emailController.text;
-        acc.role = _roleController.text;
-        acc.active = _activeController.text.toLowerCase() == "true";
-        acc.fullname = _fullnameController.text;
-        acc.phone = _phoneController.text;
-        acc.gender = _genderController.text;
-        acc.dob = DateTime.parse(_dobController.text);
+        acc.email = _emailController.text.trim();
+        acc.role = _roleController.text.trim();
+        acc.active = _activeController.text.trim().toLowerCase() == "true";
+        acc.fullname = _fullnameController.text.trim();
+        acc.phone = _phoneController.text.trim();
+        acc.gender = _genderController.text.trim();
+        acc.dob = DateTime.parse(_dobController.text.trim());
         MyApi().updateAccount(acc.id, acc).then((value) => {
               if (value)
                 {MyUtil.showSnackBar(context, 'Account updated')}
@@ -62,16 +62,16 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
       } else {
         Account newAcc = new Account(
             id: null,
-            active: _activeController.text.toLowerCase() == "true",
+            active: _activeController.text.trim().toLowerCase() == "true",
             avatar:
                 "https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
-            dob: DateTime.parse(_dobController.text),
-            email: _emailController.text,
-            fullname: _fullnameController.text,
-            gender: _genderController.text,
-            phone: _phoneController.text,
-            role: _roleController.text);
-        MyApi().createAccount(newAcc, _passController.text).then((value) => {
+            dob: DateTime.parse(_dobController.text.trim()),
+            email: _emailController.text.trim(),
+            fullname: _fullnameController.text.trim(),
+            gender: _genderController.text.trim(),
+            phone: _phoneController.text.trim(),
+            role: _roleController.text.trim());
+        MyApi().createAccount(newAcc, _passController.text.trim()).then((value) => {
               if (value)
                 {
                   Navigator.pop(context),

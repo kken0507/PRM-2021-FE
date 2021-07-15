@@ -135,6 +135,7 @@ class _LoginState extends State<Login> {
                                                   const EdgeInsets.all(8.0),
                                               child: Input(
                                                   placeholder: "Password",
+                                                  obscureText: true,
                                                   controller:
                                                       TextEditingController(
                                                           text: user.password),

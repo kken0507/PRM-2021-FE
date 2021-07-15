@@ -171,6 +171,20 @@ class _CreateFormState extends State<CreateForm> {
                     if (value.isEmpty) {
                       return "Empty value";
                     }
+                    if (value.length < 4)
+                      return "Must be at least 4 characters in length";
+                    // if (value.length < 8)
+                      // return "Must be at least 8 characters in length";
+                    // Pattern pattern =
+                    //     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+                    // RegExp regex = new RegExp(pattern);
+                    // if (!regex.hasMatch(value))
+                    //   return 'Should contain at least 1 upper-case, 1 lower-case, 1 digit, 1 special-character';
+                    Pattern pattern = r"\s+";
+                    RegExp regex = new RegExp(pattern);
+                    if (value.trim().contains(regex)) {
+                      return 'Password can\'t contain whitespaces';
+                    }
                     return null;
                   },
                   controller: widget.passwordController,

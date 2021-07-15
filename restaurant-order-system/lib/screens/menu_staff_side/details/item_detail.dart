@@ -60,10 +60,10 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       if (item != null) {
-        item.name = _nameController.text;
-        item.price = double.parse(_priceController.text);
-        item.description = _descriptionController.text;
-        item.available = _statusController.text.toLowerCase() == "true";
+        item.name = _nameController.text.trim();
+        item.price = double.parse(_priceController.text.trim());
+        item.description = _descriptionController.text.trim();
+        item.available = _statusController.text.trim().toLowerCase() == "true";
         MyApi().updateItem(item.id, item).then((value) => {
               if (value)
                 {MyUtil.showSnackBar(context, 'Item updated')}
@@ -73,11 +73,11 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
       } else {
         Item newItem = new Item(
             id: null,
-            available: _statusController.text.toLowerCase() == "true",
+            available: _statusController.text.trim().toLowerCase() == "true",
             description: _descriptionController.text.trim(),
             img: img,
-            name: _nameController.text,
-            price: double.parse(_priceController.text));
+            name: _nameController.text.trim(),
+            price: double.parse(_priceController.text.trim()));
         MyApi().createItem(newItem).then((value) => {
               if (value)
                 {
@@ -213,10 +213,10 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
 //     final FormState form = _formKey.currentState;
 //     if (form.validate()) {
 //       if (item != null) {
-//         item.name = _nameController.text;
-//         item.price = double.parse(_priceController.text);
-//         item.description = _descriptionController.text;
-//         item.available = _statusController.text.toLowerCase() == "true";
+//         item.name = _nameController.text.trim();
+//         item.price = double.parse(_priceController.text.trim());
+//         item.description = _descriptionController.text.trim();
+//         item.available = _statusController.text.trim().toLowerCase() == "true";
 //         MyApi().updateItem(item.id, item).then((value) => {
 //               if (value) {MyUtil.showSnackBar(context, 'Item updated')}
 //             });

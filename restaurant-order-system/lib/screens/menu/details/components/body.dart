@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kiennt_restaurant/constants/constants.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu/details/components/item_image.dart';
 import 'package:kiennt_restaurant/screens/menu/details/components/order_button.dart';
 import 'package:kiennt_restaurant/screens/menu/details/components/title_price_rating.dart';
-import 'package:meta/meta.dart';
 
 class Body extends StatelessWidget {
   // Declare a field that holds the Item.

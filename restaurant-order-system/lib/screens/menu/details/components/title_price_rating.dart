@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
-import 'package:kiennt_restaurant/constants/constants.dart';
 
 class TitlePriceRating extends StatelessWidget {
   final double price;

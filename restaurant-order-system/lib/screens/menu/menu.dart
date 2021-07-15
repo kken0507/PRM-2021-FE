@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu/details/item_detail.dart';
-import 'package:kiennt_restaurant/screens/order_history/component/detail/order_detail.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/widgets/card-item.dart';
 
@@ -157,6 +156,7 @@ class _MenuScreenState extends State<MenuScreen> {
         // key: _scaffoldKey,
         drawer: ArgonDrawer(currentPage: "Menu"),
         body: ListView.builder(
+          physics: BouncingScrollPhysics(),
           itemBuilder: (context, index) {
             return _listItem(index);
           },

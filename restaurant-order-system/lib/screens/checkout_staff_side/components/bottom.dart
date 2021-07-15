@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/response/bill.dart';
-import 'package:kiennt_restaurant/models/response/order.dart';
 import 'package:kiennt_restaurant/screens/checkout_staff_side/checkout_staff_side.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/dialog_util.dart';

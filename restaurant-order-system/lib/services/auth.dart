@@ -7,7 +7,6 @@ import 'package:kiennt_restaurant/models/api_err.dart';
 import 'package:kiennt_restaurant/models/auth.dart';
 import 'package:kiennt_restaurant/models/user.dart';
 import 'package:kiennt_restaurant/services/storage/local_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 String _baseUrl = "http://192.168.2.174:8091/";
 Future<ApiResponse> authenticateUser(String email, String password) async {

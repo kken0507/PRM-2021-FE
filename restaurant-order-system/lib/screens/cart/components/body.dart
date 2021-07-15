@@ -23,6 +23,7 @@ class _BodyState extends State<Body> {
       padding:
           EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20.0)),
       child: ListView.builder(
+        physics: BouncingScrollPhysics(),
         itemCount: _list.length,
         itemBuilder: (context, index) => Padding(
           padding: EdgeInsets.symmetric(vertical: 10),

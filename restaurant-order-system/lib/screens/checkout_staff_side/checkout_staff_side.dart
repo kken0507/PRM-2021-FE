@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
-import 'package:kiennt_restaurant/models/response/bill.dart';
 import 'package:kiennt_restaurant/screens/checkout_staff_side/components/body.dart';
 import 'package:kiennt_restaurant/screens/checkout_staff_side/components/bottom.dart';
 import 'package:kiennt_restaurant/services/api.dart';
-import 'package:kiennt_restaurant/screens/menu/menu.dart';
-import 'package:kiennt_restaurant/util/dialog_util.dart';
 
 //widgets
 import 'package:kiennt_restaurant/widgets/navbar.dart';

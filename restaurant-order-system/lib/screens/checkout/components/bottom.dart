@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
-import 'package:kiennt_restaurant/models/common/session.dart';
+import 'package:kiennt_restaurant/models/response/bill.dart';
 import 'package:kiennt_restaurant/screens/checkout/after_checkout.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/services/storage/local_storage.dart';
@@ -12,10 +12,10 @@ import 'package:kiennt_restaurant/configs/size_config.dart';
 class Bottom extends StatelessWidget {
   const Bottom({
     Key key,
-    this.session,
+    this.bill,
   }) : super(key: key);
 
-  final Session session;
+  final BillResponse bill;
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +51,13 @@ class Bottom extends StatelessWidget {
                     text: "Checkout",
                     color: ThemeColors.initial,
                     press: () async {
-                      if (session != null) {
+                      if (bill!= null && bill.session != null) {
                         DialogUtil().confirmDialog(context, () async {
                           var isSuccess =
-                              await MyApi().closeSession(session.sessionId);
+                              await MyApi().closeSession(bill.session.sessionId);
                           if (isSuccess) {
                             LocalStorage.deleteSesion();
-                            Navigator.pushNamed(context, AfterCheckoutScreen.routeName, arguments: session);
+                            Navigator.pushNamed(context, AfterCheckoutScreen.routeName, arguments: bill);
                           } else {
                             await DialogUtil().errorDialog(context, () {},
                                 "ERROR", "Failed to close session");

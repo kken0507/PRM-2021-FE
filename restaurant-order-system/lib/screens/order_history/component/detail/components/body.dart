@@ -63,6 +63,7 @@ class CardOrderDetail extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+                physics: BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(8),
                 itemCount: order.orderDetails.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -115,6 +116,7 @@ class CardOrderStatus extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+                physics: BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(8),
                 itemCount: order.orderStatus.length,
                 itemBuilder: (BuildContext context, int index) {

@@ -145,6 +145,7 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
       // key: _scaffoldKey,
       drawer: ArgonDrawer(currentPage: "Menu"),
       body: ListView.builder(
+        physics: BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return SlidableWidget(
             child: _listItem(index),

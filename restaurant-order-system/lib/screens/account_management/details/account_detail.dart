@@ -71,15 +71,17 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
             gender: _genderController.text.trim(),
             phone: _phoneController.text.trim(),
             role: _roleController.text.trim());
-        MyApi().createAccount(newAcc, _passController.text.trim()).then((value) => {
-              if (value)
-                {
-                  Navigator.pop(context),
-                  MyUtil.showSnackBar(context, 'Account created')
-                }
-              else
-                {MyUtil.showSnackBar(context, 'Create account failed')}
-            });
+        MyApi()
+            .createAccount(newAcc, _passController.text.trim())
+            .then((value) => {
+                  if (value)
+                    {
+                      Navigator.pop(context),
+                      MyUtil.showSnackBar(context, 'Account created')
+                    }
+                  else
+                    {MyUtil.showSnackBar(context, 'Create account failed')}
+                });
       }
     } else {
       MyUtil.showSnackBar(context, 'Form is invalid');
@@ -122,32 +124,35 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
   }
 
   body() {
-    return ListView(shrinkWrap: true, children: [
-      AccountImage(imgSrc: img),
-      if (acc != null)
-        DetailForm(
-          emailController: _emailController,
-          activeController: _activeController,
-          dobController: _dobController,
-          fullnameController: _fullnameController,
-          genderController: _genderController,
-          phoneController: _phoneController,
-          roleController: _roleController,
-          formKey: _formKey,
-        ),
-      if (acc == null)
-        CreateForm(
-          emailController: _emailController,
-          activeController: _activeController,
-          dobController: _dobController,
-          fullnameController: _fullnameController,
-          genderController: _genderController,
-          phoneController: _phoneController,
-          roleController: _roleController,
-          passwordController: _passController,
-          formKey: _formKey,
-        ),
-    ]);
+    return ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        children: [
+          AccountImage(imgSrc: img),
+          if (acc != null)
+            DetailForm(
+              emailController: _emailController,
+              activeController: _activeController,
+              dobController: _dobController,
+              fullnameController: _fullnameController,
+              genderController: _genderController,
+              phoneController: _phoneController,
+              roleController: _roleController,
+              formKey: _formKey,
+            ),
+          if (acc == null)
+            CreateForm(
+              emailController: _emailController,
+              activeController: _activeController,
+              dobController: _dobController,
+              fullnameController: _fullnameController,
+              genderController: _genderController,
+              phoneController: _phoneController,
+              roleController: _roleController,
+              passwordController: _passController,
+              formKey: _formKey,
+            ),
+        ]);
   }
 
   bottom() {

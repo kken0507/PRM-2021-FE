@@ -4,13 +4,10 @@ import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/detail_form.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_image.dart';
-import 'package:kiennt_restaurant/screens/setting/setting_form.dart';
 import 'package:kiennt_restaurant/services/api.dart';
-import 'package:kiennt_restaurant/services/storage/local_storage.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
 import 'package:kiennt_restaurant/widgets/default_button.dart';
 import 'package:kiennt_restaurant/widgets/navbar.dart';
-import 'package:kiennt_restaurant/widgets/stateful_warpper.dart';
 
 class ItemDetailStaffScreen extends StatefulWidget {
   static String routeName = "/item-detail-staff";
@@ -117,16 +114,19 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
   }
 
   body() {
-    return ListView(shrinkWrap: true, children: [
-      ItemImage(imgSrc: img),
-      DetailForm(
-        nameController: _nameController,
-        priceController: _priceController,
-        desController: _descriptionController,
-        statusController: _statusController,
-        formKey: _formKey,
-      ),
-    ]);
+    return ListView(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        children: [
+          ItemImage(imgSrc: img),
+          DetailForm(
+            nameController: _nameController,
+            priceController: _priceController,
+            desController: _descriptionController,
+            statusController: _statusController,
+            formKey: _formKey,
+          ),
+        ]);
   }
 
   bottom() {

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/configs/size_config.dart';
@@ -7,9 +6,7 @@ import 'package:kiennt_restaurant/configs/size_config.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/constants/my_const.dart';
 import 'package:kiennt_restaurant/models/common/account.dart';
-import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/account_management/details/account_detail.dart';
-import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_detail.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
 import 'package:kiennt_restaurant/widgets/default_button.dart';
@@ -140,6 +137,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       // key: _scaffoldKey,
       drawer: ArgonDrawer(currentPage: "Account"),
       body: ListView.builder(
+        physics: BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return SlidableWidget(
             child: _listItem(index),

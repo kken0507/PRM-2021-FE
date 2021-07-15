@@ -140,6 +140,7 @@ class ArgonDrawer extends StatelessWidget {
             return Expanded(
                 flex: 2,
                 child: ListView(
+                  physics: ClampingScrollPhysics(),
                   padding: EdgeInsets.only(top: 24, left: 16, right: 16),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,

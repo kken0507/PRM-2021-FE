@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
-import 'package:kiennt_restaurant/constants/constants.dart';
 
 class OrderButton extends StatelessWidget {
   const OrderButton({

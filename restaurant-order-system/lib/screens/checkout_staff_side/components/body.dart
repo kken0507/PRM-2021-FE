@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
-import 'package:kiennt_restaurant/models/common/order_detail.dart';
-import 'package:kiennt_restaurant/models/common/session.dart';
 import 'package:kiennt_restaurant/models/response/bill.dart';
 
 class Body extends StatelessWidget {
@@ -38,12 +36,12 @@ class Body extends StatelessWidget {
         Flexible(
           flex: 3,
           child: CardOrderDetail(
-            session: bill.session,
+            bill: bill,
           ),
         ),
         Flexible(
-          flex: 1,
-          child: Card(
+            flex: 1,
+            child: Card(
               elevation: 0.6,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(6.0))),
@@ -52,45 +50,26 @@ class Body extends StatelessWidget {
                   child: Center(
                     child: Text(
                         "Total items: " +
-                            bill.totalItemQuantity.toString() + "- Total price: " + bill.totalPrice.toString(),
+                            bill.totalItemQuantity.toString() +
+                            "- Total price: " +
+                            bill.totalPrice.toString(),
                         style:
                             TextStyle(color: ThemeColors.header, fontSize: 16)),
                   )),
-            )
-        ),
+            )),
       ],
     );
   }
 }
 
 class CardOrderDetail extends StatelessWidget {
-  CardOrderDetail({this.session = null, this.onTap = defaultFunc});
+  CardOrderDetail({this.bill = null, this.onTap = defaultFunc});
 
   final Function onTap;
-  final Session session;
+  final BillResponse bill;
 
   static void defaultFunc() {
     print("the function works!");
-  }
-
-  int _detailCount() {
-    int res = 0;
-    for (var order in session.orders) {
-      for (var detail in order.orderDetails) {
-        res += detail.quantity;
-      }
-    }
-    return res;
-  }
-
-  List<OrderDetail> _allOrderDetails() {
-    List<OrderDetail> res =[];
-    for (var order in session.orders) {
-      for (var detail in order.orderDetails) {
-        res.add(detail);
-      }
-    }
-    return res;
   }
 
   @override
@@ -107,13 +86,14 @@ class CardOrderDetail extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
+                physics: BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(8),
-                itemCount: _allOrderDetails().length,
+                itemCount: bill.items.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 50,
                     child: Text(
-                      '${index + 1} - ${_allOrderDetails()[index].item.name} X ${_allOrderDetails()[index].quantity}',
+                      '${index + 1} - ${bill.items[index].item.name} X ${bill.items[index].quantity}',
                       style: TextStyle(fontSize: 21),
                     ),
                   );

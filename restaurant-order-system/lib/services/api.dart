@@ -9,7 +9,6 @@ import 'package:kiennt_restaurant/models/response/open_session.dart';
 import 'package:kiennt_restaurant/models/response/session.dart';
 import 'package:kiennt_restaurant/models/shopping_cart.dart';
 import 'package:kiennt_restaurant/services/storage/local_storage.dart';
-import 'package:kiennt_restaurant/util/my_util.dart';
 
 class MyApi {
   String _baseUrl = "http://192.168.2.174:8091/";

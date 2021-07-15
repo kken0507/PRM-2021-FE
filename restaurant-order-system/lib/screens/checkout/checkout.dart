@@ -29,7 +29,7 @@ class CheckoutScreen extends StatelessWidget {
       future: MyApi().getBill(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Bottom(session: snapshot.data.session,);
+          return Bottom(bill: snapshot.data,);
         } else {
           return Container();
         }

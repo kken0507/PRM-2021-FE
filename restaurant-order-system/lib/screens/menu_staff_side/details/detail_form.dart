@@ -66,8 +66,12 @@ class _DetailFormState extends State<DetailForm> {
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
                   validator: (value) {
+                    var validCharacters = RegExp(r'^[0-9]+[.]?[0-9]+$');
                     if (value.isEmpty) {
                       return "Empty value";
+                    }
+                    if(!validCharacters.hasMatch(value)) {
+                      return "Only number allowed";
                     }
                     return null;
                   },

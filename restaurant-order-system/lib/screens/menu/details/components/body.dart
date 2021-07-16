@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu/details/components/item_image.dart';
 import 'package:kiennt_restaurant/screens/menu/details/components/order_button.dart';
@@ -13,19 +14,25 @@ class Body extends StatelessWidget {
   // In the constructor, a Item, function onTap.
   Body({Key key, this.item, this.ontap}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ItemImage(
-          imgSrc: item.img,
-        ),
-        Expanded(
-          child: ItemInfo(item: item,ontap: ontap,),
-        ),
-      ],
-    );
+    return Card(
+        elevation: 0.6,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6.0))),
+        child: Column(
+          children: <Widget>[
+            ItemImage(
+              imgSrc: item.img,
+            ),
+            Expanded(
+              child: ItemInfo(
+                item: item,
+                ontap: ontap,
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -40,7 +47,7 @@ class ItemInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size/2;
+    Size size = MediaQuery.of(context).size / 2;
     return Container(
       padding: EdgeInsets.all(1),
       width: double.infinity,
@@ -61,6 +68,14 @@ class ItemInfo extends StatelessWidget {
             price: item.price,
             // onRatingChanged: (value) {},
           ),
+          Text(
+            "Description:",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: ThemeColors.text),
+          ),
+          SizedBox(height: size.height * 0.1),
           Text(
             item.description,
             style: TextStyle(

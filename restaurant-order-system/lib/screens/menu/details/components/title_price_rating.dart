@@ -24,11 +24,14 @@ class TitlePriceRating extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  name,
-                  style: Theme.of(context).textTheme.headline,
+                  name.toUpperCase(),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: ThemeColors.header),
                 ),
                 SizedBox(height: 10),
                 // Row(

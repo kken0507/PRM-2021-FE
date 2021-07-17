@@ -37,6 +37,24 @@ class Body extends StatelessWidget {
                   )),
             )),
         Flexible(
+            flex: 1,
+            child: Card(
+              elevation: 0.6,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0))),
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                        "OrderId: " +
+                            order.orderId.toString() +
+                            " - ordered at: " +
+                            order.createdAt.toString().substring(0, 19),
+                        style:
+                            TextStyle(color: ThemeColors.header, fontSize: 18)),
+                  )),
+            )),
+        Flexible(
           flex: 3,
           child: CardOrderDetail(
             order: order,

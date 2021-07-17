@@ -56,7 +56,7 @@ class Body extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: CardOrderDetail(
-                      bill: bill,
+                      bill: bill, height: 250,
                     ),
                   ),
                   Expanded(
@@ -139,14 +139,11 @@ class Body extends StatelessWidget {
 }
 
 class CardOrderDetail extends StatelessWidget {
-  CardOrderDetail({this.bill = null, this.onTap = defaultFunc});
+  CardOrderDetail({this.bill = null, this.height});
 
-  final Function onTap;
   final BillResponse bill;
 
-  static void defaultFunc() {
-    print("the function works!");
-  }
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +161,7 @@ class CardOrderDetail extends StatelessWidget {
             ),
             Container(
               width: double.maxFinite,
-              height: 250,
+              height: height ?? null,
               child: ListView.builder(
                 shrinkWrap: true,
                   physics: BouncingScrollPhysics(),

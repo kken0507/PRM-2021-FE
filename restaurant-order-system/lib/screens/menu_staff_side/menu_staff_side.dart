@@ -235,6 +235,8 @@ class ThisCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<String> tmp = description.split(RegExp(r"[\r\n|\r|\n]+"));
+
     return Container(
         height: 200,
         child: GestureDetector(
@@ -271,7 +273,12 @@ class ThisCardItem extends StatelessWidget {
                           Text(name,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 13)),
-                          Text("[" + description + "]",
+                          Text(
+                              "[ " +
+                                  (tmp.length >= 2
+                                      ? tmp[0] + "\n" + tmp[1] + "\n..."
+                                      : description) +
+                                  " ]",
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
                           Text(price.toString() + "VND",

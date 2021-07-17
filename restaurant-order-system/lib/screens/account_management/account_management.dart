@@ -30,6 +30,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   String searchValue = "";
   List<Account> _list = [];
   List<Account> _listForDisplay = [];
+  String _searchValue = "";
 
   @override
   void initState() {
@@ -47,16 +48,16 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   void _handleSearch(str) {
-    searchValue = str;
-    searchValue = searchValue.toLowerCase();
+    _searchValue = str;
+    _searchValue = _searchValue.toLowerCase();
     Set<Account> tmp = {};
     tmp.addAll(_list.where((account) {
       var s = account.fullname.toLowerCase();
-      return s.contains(searchValue);
+      return s.contains(_searchValue);
     }).toList());
     tmp.addAll(_list.where((account) {
       var s = account.email.toLowerCase();
-      return s.contains(searchValue);
+      return s.contains(_searchValue);
     }).toList());
     setState(() {
       _listForDisplay = tmp.toList();
@@ -64,14 +65,24 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
   }
 
   Future<void> _reloadList(str) async {
-    searchValue = str;
-    searchValue = searchValue.toLowerCase();
-    // setState(() {
-    //   _listForDisplay = _list.where((item) {
-    //     var title = item.name.toLowerCase();
-    //     return title.contains(searchValue);
-    //   }).toList();
-    // });
+    _searchValue = str;
+    _searchValue = _searchValue.toLowerCase();
+    Set<Account> tmp = {};
+    tmp.addAll(_list.where((account) {
+      var s = account.fullname.toLowerCase();
+      return s.contains(_searchValue);
+    }).toList());
+    tmp.addAll(_list.where((account) {
+      var s = account.email.toLowerCase();
+      return s.contains(_searchValue);
+    }).toList());
+    setState(() {
+      _listForDisplay = tmp.toList();
+    });
+  }
+
+  Future<void> pullRefresh() async {
+    initializeList().then((value) => _reloadList(_searchValue));
   }
 
   bottom() {
@@ -110,7 +121,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                       context,
                       AccountDetailScreen.routeName,
                     ).then((value) => initializeList()
-                        .then((value) => _reloadList(searchValue)));
+                        .then((value) => _reloadList(_searchValue)));
                   },
                 ),
               ),
@@ -136,17 +147,20 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
       backgroundColor: ThemeColors.bgColorScreen,
       // key: _scaffoldKey,
       drawer: ArgonDrawer(currentPage: "Account"),
-      body: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return SlidableWidget(
-            child: _listItem(index),
-            onDismissed: (action) =>
-                {dismissSlidableItem(context, index, action)},
-          );
-        },
-        itemCount: _listForDisplay.length,
-      ),
+      body: RefreshIndicator(
+          onRefresh: pullRefresh,
+          child: ListView.builder(
+            physics:
+                AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            itemBuilder: (context, index) {
+              return SlidableWidget(
+                child: _listItem(index),
+                onDismissed: (action) =>
+                    {dismissSlidableItem(context, index, action)},
+              );
+            },
+            itemCount: _listForDisplay.length,
+          )),
       bottomNavigationBar: bottom(),
     );
   }
@@ -164,7 +178,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
                     if (value)
                       {
                         initializeList().then((value) =>
-                            _reloadList(searchValue).then((value) =>
+                            _reloadList(_searchValue).then((value) =>
                                 MyUtil.showSnackBar(
                                     context, 'Status changed'))),
                       }
@@ -191,7 +205,7 @@ class _AccountManagementScreenState extends State<AccountManagementScreen> {
         Navigator.pushNamed(context, AccountDetailScreen.routeName,
                 arguments: _listForDisplay[index])
             .then((value) =>
-                initializeList().then((value) => _reloadList(searchValue)));
+                initializeList().then((value) => _reloadList(_searchValue)));
       },
     );
   }

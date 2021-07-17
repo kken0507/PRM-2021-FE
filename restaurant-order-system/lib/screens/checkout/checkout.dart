@@ -6,8 +6,21 @@ import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/widgets/drawer.dart';
 import 'package:kiennt_restaurant/widgets/navbar.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
+  const CheckoutScreen({Key key}) : super(key: key);
+
   static String routeName = "/checkout";
+
+  @override
+  _CheckoutScreenState createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  // final GlobalKey _scaffoldKey = new GlobalKey();
+
+  Future<void> pullRefresh() async {
+    setState(() {});
+  }
 
   _body() {
     return FutureBuilder(
@@ -15,7 +28,7 @@ class CheckoutScreen extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Body(
-            bill: snapshot.data,
+            bill: snapshot.data, onRefresh: pullRefresh,
           );
         } else {
           return Container();
@@ -29,7 +42,9 @@ class CheckoutScreen extends StatelessWidget {
       future: MyApi().getBill(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Bottom(bill: snapshot.data,);
+          return Bottom(
+            bill: snapshot.data,
+          );
         } else {
           return Container();
         }

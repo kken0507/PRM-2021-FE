@@ -8,57 +8,133 @@ class Body extends StatelessWidget {
   // Declare a field that holds the Item.
   final Function ontap;
 
+  final Function onRefresh;
+
   // In the constructor, a Item, function onTap.
-  Body({Key key, this.ontap, this.bill}) : super(key: key);
+  Body({Key key, this.ontap, this.bill, this.onRefresh = defaultFunc }) : super(key: key);
+
+  static Future defaultFunc() {
+    print("the function works!");
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Flexible(
-            flex: 1,
-            child: Card(
-              elevation: 0.6,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6.0))),
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                        "Session #" +
-                            bill.session.sessionNumber +
-                            " - pos:" +
-                            bill.session.position,
-                        style:
-                            TextStyle(color: ThemeColors.header, fontSize: 18)),
-                  )),
-            )),
-        Flexible(
-          flex: 3,
-          child: CardOrderDetail(
-            bill: bill,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return RefreshIndicator(
+        onRefresh: onRefresh,
+        child: SingleChildScrollView(
+          physics:
+              AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: viewportConstraints.maxHeight,
+            ),
+            child: IntrinsicHeight(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 100.0,
+                    alignment: Alignment.center,
+                    child: Card(
+                      elevation: 0.6,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6.0))),
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                                "Session #" +
+                                    bill.session.sessionNumber +
+                                    " - pos:" +
+                                    bill.session.position,
+                                style: TextStyle(
+                                    color: ThemeColors.header, fontSize: 18)),
+                          )),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: CardOrderDetail(
+                      bill: bill,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Card(
+                      elevation: 0.6,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6.0))),
+                      child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                                "Total items: " +
+                                    bill.totalItemQuantity.toString() +
+                                    "- Total price: " +
+                                    bill.totalPrice.toString(),
+                                style: TextStyle(
+                                    color: ThemeColors.header, fontSize: 16)),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-        Flexible(
-            flex: 1,
-            child: Card(
-              elevation: 0.6,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6.0))),
-              child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                        "Total items: " +
-                            bill.totalItemQuantity.toString() +
-                            "- Total price: " +
-                            bill.totalPrice.toString(),
-                        style:
-                            TextStyle(color: ThemeColors.header, fontSize: 16)),
-                  )),
-            )),
-      ],
+        ));
+      },
     );
+    // return Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: <Widget>[
+    //     Flexible(
+    //         fit: FlexFit.loose,
+    //         flex: 1,
+    //         child: Card(
+    //           elevation: 0.6,
+    //           shape: RoundedRectangleBorder(
+    //               borderRadius: BorderRadius.all(Radius.circular(6.0))),
+    //           child: Padding(
+    //               padding: const EdgeInsets.all(8.0),
+    //               child: Center(
+    //                 child: Text(
+    //                     "Session #" +
+    //                         bill.session.sessionNumber +
+    //                         " - pos:" +
+    //                         bill.session.position,
+    //                     style:
+    //                         TextStyle(color: ThemeColors.header, fontSize: 18)),
+    //               )),
+    //         )),
+    //     Flexible(
+    //       fit: FlexFit.loose,
+    //       flex: 3,
+    //       child: CardOrderDetail(
+    //         bill: bill,
+    //       ),
+    //     ),
+    //     Flexible(
+    //         fit: FlexFit.loose,
+    //         flex: 1,
+    //         child: Card(
+    //           elevation: 0.6,
+    //           shape: RoundedRectangleBorder(
+    //               borderRadius: BorderRadius.all(Radius.circular(6.0))),
+    //           child: Padding(
+    //               padding: const EdgeInsets.all(8.0),
+    //               child: Center(
+    //                 child: Text(
+    //                     "Total items: " +
+    //                         bill.totalItemQuantity.toString() +
+    //                         "- Total price: " +
+    //                         bill.totalPrice.toString(),
+    //                     style:
+    //                         TextStyle(color: ThemeColors.header, fontSize: 16)),
+    //               )),
+    //         )),
+    //   ],
+    // );
   }
 }
 
@@ -78,28 +154,31 @@ class CardOrderDetail extends StatelessWidget {
       elevation: 0.6,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6.0))),
-      child: Column(
-        children: [
-          Text(
-            'ITEMS',
-            style: TextStyle(fontSize: 25),
-          ),
-          Expanded(
-            child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(8),
-                itemCount: bill.items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    height: 50,
-                    child: Text(
-                      '${index + 1} - ${bill.items[index].item.name} X ${bill.items[index].quantity} = ${bill.items[index].price}',
-                      style: TextStyle(fontSize: 21),
-                    ),
-                  );
-                }),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(
+              'ITEMS',
+              style: TextStyle(fontSize: 25),
+            ),
+            Container(
+              width: double.maxFinite,
+              height: 250,
+              child: ListView.builder(
+                shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  itemCount: bill.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Text(
+                        '${index + 1} - ${bill.items[index].item.name} X ${bill.items[index].quantity} = ${bill.items[index].price}',
+                        style: TextStyle(fontSize: 21),
+                      );
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }

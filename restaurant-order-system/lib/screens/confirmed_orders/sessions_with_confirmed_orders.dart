@@ -49,6 +49,10 @@ class _ConfirmedOrdersScreenState extends State<ConfirmedOrdersScreen> {
     initializeList();
   }
 
+  Future<void> pullRefresh() async {
+    initializeList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,8 +121,11 @@ class _ConfirmedOrdersScreenState extends State<ConfirmedOrdersScreen> {
       // ),
       body: Container(
           child: Center(
+              child: RefreshIndicator(
+        onRefresh: pullRefresh,
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics:
+              AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           scrollDirection: Axis.vertical,
           itemCount: _listForDisplay.length,
           itemBuilder: (context, index) {
@@ -135,7 +142,7 @@ class _ConfirmedOrdersScreenState extends State<ConfirmedOrdersScreen> {
             );
           },
         ),
-      )),
+      ))),
     );
   }
 }

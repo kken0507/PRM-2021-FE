@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
@@ -10,10 +12,39 @@ import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/widgets/navbar.dart';
 import 'package:kiennt_restaurant/widgets/drawer.dart';
 
-class OrderHistoryScreen extends StatelessWidget {
+class OrderHistoryScreen extends StatefulWidget {
+  const OrderHistoryScreen({Key key}) : super(key: key);
+
   static String routeName = "/order-history";
 
+  @override
+  _OrderHistoryScreenState createState() => _OrderHistoryScreenState();
+}
+
+class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   // final GlobalKey _scaffoldKey = new GlobalKey();
+
+  List<SessionResponse> _list = [];
+  List<SessionResponse> _listForDisplay = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initializeList();
+  }
+
+  Future<void> initializeList() async {
+    setState(() {});
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    setState(() {});
+  }
+
+  Future<void> pullRefresh() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,25 +109,31 @@ class OrderHistoryScreen extends StatelessWidget {
                       //   index: 0,
                       // ),
                       Expanded(
-                          child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: snapshot.data.orders.length,
-                        itemBuilder: (context, index) {
-                          return CardOrder(
-                            cta: "Press to view detail...",
-                            status: snapshot
-                                .data.orders[index].curOrderStatus.status,
-                            id: snapshot.data.orders[index].orderId,
-                            index: index + 1,
-                            orderedAt: snapshot.data.orders[index].createdAt,
-                            onTap: () {
-                              Navigator.pushNamed(context, OrderDetailScreen.routeName,
-                                  arguments: snapshot.data.orders[index]);
-                            },
-                          );
-                        },
-                      )),
+                        child: RefreshIndicator(
+                            onRefresh: pullRefresh,
+                            child: ListView.builder(
+                              physics: AlwaysScrollableScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.orders.length,
+                              itemBuilder: (context, index) {
+                                return CardOrder(
+                                  cta: "Press to view detail...",
+                                  status: snapshot
+                                      .data.orders[index].curOrderStatus.status,
+                                  id: snapshot.data.orders[index].orderId,
+                                  index: index + 1,
+                                  orderedAt:
+                                      snapshot.data.orders[index].createdAt,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, OrderDetailScreen.routeName,
+                                        arguments: snapshot.data.orders[index]);
+                                  },
+                                );
+                              },
+                            )),
+                      )
                     ],
                   ),
                 ));

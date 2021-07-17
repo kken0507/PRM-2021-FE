@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
@@ -111,16 +113,25 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
 // final GlobalKey _scaffoldKey = new GlobalKey();
   final TextEditingController _controller = new TextEditingController();
-  String searchValue = "";
-  bool _isSearching;
+  String _searchValue = "";
   List<Item> _list = [];
   List<Item> _listForDisplay = [];
 
   @override
   void initState() {
     super.initState();
-    _isSearching = false;
     initializeList();
+  }
+
+  void _handleSearch(str) {
+    _searchValue = str;
+    _searchValue = _searchValue.toLowerCase();
+    setState(() {
+      _listForDisplay = _list.where((item) {
+        var title = item.name.toLowerCase();
+        return title.contains(_searchValue);
+      }).toList();
+    });
   }
 
   Future<void> initializeList() async {
@@ -128,9 +139,27 @@ class _MenuScreenState extends State<MenuScreen> {
     if (_list.isNotEmpty) {
       setState(() {
         _listForDisplay = _list;
-        _isSearching = false;
       });
     }
+  }
+
+  Future<void> _reloadList(str) async {
+    _searchValue = str;
+    _searchValue = _searchValue.toLowerCase();
+    setState(() {
+      _listForDisplay = _list.where((item) {
+        var title = item.name.toLowerCase();
+        return title.contains(_searchValue);
+      }).toList();
+    });
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    initializeList().then((value) => _reloadList(_searchValue));
+  }
+
+  Future<void> pullRefresh() async {
+    initializeList().then((value) => _reloadList(_searchValue));
   }
 
   @override
@@ -140,28 +169,21 @@ class _MenuScreenState extends State<MenuScreen> {
           title: "Menu",
           searchBar: true,
           placeholder: "Search by name...",
-          searchOnChanged: (str) {
-            String tmp = str;
-            tmp = tmp.toLowerCase();
-            setState(() {
-              _listForDisplay = _list.where((item) {
-                var title = item.name.toLowerCase();
-                return title.contains(tmp);
-              }).toList();
-            });
-            this.searchValue = str;
-          },
+          searchOnChanged: _handleSearch,
         ),
         backgroundColor: ThemeColors.bgColorScreen,
         // key: _scaffoldKey,
         drawer: ArgonDrawer(currentPage: "Menu"),
-        body: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-            return _listItem(index);
-          },
-          itemCount: _listForDisplay.length,
-        ));
+        body: RefreshIndicator(
+            onRefresh: pullRefresh,
+            child: ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics()),
+              itemBuilder: (context, index) {
+                return _listItem(index);
+              },
+              itemCount: _listForDisplay.length,
+            )));
   }
 
   _listItem(index) {
@@ -173,13 +195,14 @@ class _MenuScreenState extends State<MenuScreen> {
         price: _listForDisplay[index].price,
         onTap: () {
           Navigator.pushNamed(context, ItemDetail.routeName,
-              arguments: Item(
-                  id: _listForDisplay[index].id,
-                  name: _listForDisplay[index].name,
-                  description: _listForDisplay[index].description,
-                  img: _listForDisplay[index].img,
-                  price: _listForDisplay[index].price,
-                  available: _listForDisplay[index].available));
+                  arguments: Item(
+                      id: _listForDisplay[index].id,
+                      name: _listForDisplay[index].name,
+                      description: _listForDisplay[index].description,
+                      img: _listForDisplay[index].img,
+                      price: _listForDisplay[index].price,
+                      available: _listForDisplay[index].available))
+              .then(onGoBack);
         });
   }
 }

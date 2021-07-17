@@ -29,6 +29,10 @@ class _PendingOrdersInASessionScreenState
     setState(() {});
   }
 
+  Future<void> pullRefresh() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final SessionResponse session = ModalRoute.of(context).settings.arguments;
@@ -54,26 +58,30 @@ class _PendingOrdersInASessionScreenState
                   child: Column(
                     children: [
                       Expanded(
-                          child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: snapshot.data.orders.length,
-                        itemBuilder: (context, index) {
-                          return CardPendingOrder(
-                            cta: "Press to view detail...",
-                            order: snapshot.data.orders[index],
-                            index: index + 1,
-                            onTap: () {
-                              Navigator.pushNamed(context,
-                                      PendingOrderDetailScreen.routeName,
-                                      arguments: ScreenArguments(
-                                          snapshot.data.orders[index],
-                                          snapshot.data))
-                                  .then(onGoBack);
-                            },
-                          );
-                        },
-                      )),
+                        child: RefreshIndicator(
+                            onRefresh: pullRefresh,
+                            child: ListView.builder(
+                              physics: AlwaysScrollableScrollPhysics(
+                                  parent: BouncingScrollPhysics()),
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.orders.length,
+                              itemBuilder: (context, index) {
+                                return CardPendingOrder(
+                                  cta: "Press to view detail...",
+                                  order: snapshot.data.orders[index],
+                                  index: index + 1,
+                                  onTap: () {
+                                    Navigator.pushNamed(context,
+                                            PendingOrderDetailScreen.routeName,
+                                            arguments: ScreenArguments(
+                                                snapshot.data.orders[index],
+                                                snapshot.data))
+                                        .then(onGoBack);
+                                  },
+                                );
+                              },
+                            )),
+                      )
                     ],
                   ),
                 ));

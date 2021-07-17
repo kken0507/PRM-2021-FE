@@ -49,6 +49,10 @@ class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
     initializeList();
   }
 
+  Future<void> pullRefresh() async {
+    initializeList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,10 +121,13 @@ class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
       // ),
       body: Container(
           child: Center(
+              child: RefreshIndicator(
+        onRefresh: pullRefresh,
         child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics:
+              AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
           scrollDirection: Axis.vertical,
-          itemCount: _listForDisplay.length,
+          itemCount: _listForDisplay.length ?? 0,
           itemBuilder: (context, index) {
             return CardSession(
               sessionNum: _listForDisplay[index].sessionNumber,
@@ -135,7 +142,7 @@ class _PendingOrdersScreenState extends State<PendingOrdersScreen> {
             );
           },
         ),
-      )),
+      ))),
     );
   }
 }

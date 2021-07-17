@@ -68,6 +68,10 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
     });
   }
 
+  Future<void> pullRefresh() async {
+    initializeList().then((value) => _reloadList(_searchValue));
+  }
+
   Future<void> _reloadList(str) async {
     _searchValue = str;
     _searchValue = _searchValue.toLowerCase();
@@ -144,17 +148,20 @@ class _MenuStaffSideScreenState extends State<MenuStaffSideScreen> {
       backgroundColor: ThemeColors.bgColorScreen,
       // key: _scaffoldKey,
       drawer: ArgonDrawer(currentPage: "Menu"),
-      body: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return SlidableWidget(
-            child: _listItem(index),
-            onDismissed: (action) =>
-                {dismissSlidableItem(context, index, action)},
-          );
-        },
-        itemCount: _listForDisplay.length,
-      ),
+      body: RefreshIndicator(
+          onRefresh: pullRefresh,
+          child: ListView.builder(
+            physics:
+                AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            itemBuilder: (context, index) {
+              return SlidableWidget(
+                child: _listItem(index),
+                onDismissed: (action) =>
+                    {dismissSlidableItem(context, index, action)},
+              );
+            },
+            itemCount: _listForDisplay.length,
+          )),
       bottomNavigationBar: bottom(),
     );
   }

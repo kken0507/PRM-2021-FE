@@ -3,7 +3,6 @@ import 'package:kiennt_restaurant/configs/size_config.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/detail_form.dart';
-import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_image.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
 import 'package:kiennt_restaurant/widgets/default_button.dart';
@@ -27,6 +26,7 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
   var _priceController = TextEditingController();
   var _descriptionController = TextEditingController();
   var _statusController = TextEditingController();
+  var _imageController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var img =
       "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg";
@@ -57,6 +57,7 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       if (item != null) {
+        item.img = _imageController.text.trim();
         item.name = _nameController.text.trim();
         item.price = double.parse(_priceController.text.trim());
         item.description = _descriptionController.text.trim();
@@ -72,7 +73,7 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
             id: null,
             available: _statusController.text.trim().toLowerCase() == "true",
             description: _descriptionController.text.trim(),
-            img: img,
+            img: _imageController.text.trim(),
             name: _nameController.text.trim(),
             price: double.parse(_priceController.text.trim()));
         MyApi().createItem(newItem).then((value) => {
@@ -106,6 +107,7 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
         _statusController.text = item.available.toString();
       }
       if (item.img != null && item.img.trim().isNotEmpty) {
+        _imageController.text = item.img;
         setState(() {
           img = item.img;
         });
@@ -118,12 +120,15 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         children: [
-          ItemImage(imgSrc: img),
+          // ItemImage(
+          //     imgSrc:
+          //         _imageController.text.isEmpty ? img : _imageController.text),
           DetailForm(
             nameController: _nameController,
             priceController: _priceController,
             desController: _descriptionController,
             statusController: _statusController,
+            imageController: _imageController,
             formKey: _formKey,
           ),
         ]);

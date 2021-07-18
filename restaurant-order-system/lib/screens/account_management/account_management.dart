@@ -277,19 +277,19 @@ class ThisCardItem extends StatelessWidget {
                           Text(fullname,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 13)),
-                          Text("Gender: " + gender,
+                          if(role != MY_ROLES.CUSTOMER.toString().split(".").last)Text("Gender: " + gender,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
                           Text(email,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
-                          Text(phone,
+                          if(role != MY_ROLES.CUSTOMER.toString().split(".").last) Text(phone,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
                           Text(role,
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
-                          Text("DOB: " + dob.toString().substring(0, 10),
+                          if(role != MY_ROLES.CUSTOMER.toString().split(".").last) Text("DOB: " + dob.toString().substring(0, 10),
                               style: TextStyle(
                                   color: ThemeColors.header, fontSize: 11)),
                           Text(active ? "Active" : "Deactivated",

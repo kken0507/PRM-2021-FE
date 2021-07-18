@@ -1,18 +1,28 @@
+import 'dart:io';
+
+import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_image.dart';
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:kiennt_restaurant/constants/Theme.dart';
+import 'package:kiennt_restaurant/widgets/default_button.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class DetailForm extends StatefulWidget {
-  const DetailForm(
-      {Key key,
-      this.nameController,
-      this.desController,
-      this.priceController,
-      this.formKey,
-      this.statusController})
-      : super(key: key);
+  const DetailForm({
+    Key key,
+    this.nameController,
+    this.desController,
+    this.priceController,
+    this.formKey,
+    this.statusController,
+    this.imageController,
+  }) : super(key: key);
   final TextEditingController nameController;
   final TextEditingController priceController;
   final TextEditingController desController;
   final TextEditingController statusController;
+  final TextEditingController imageController;
   final GlobalKey<FormState> formKey;
 
   @override
@@ -21,6 +31,7 @@ class DetailForm extends StatefulWidget {
 
 class _DetailFormState extends State<DetailForm> {
   bool _flag = false;
+  File _imageFile;
 
   void _handleCheckbox(bool e) {
     setState(() {
@@ -38,6 +49,40 @@ class _DetailFormState extends State<DetailForm> {
     super.initState();
   }
 
+  Future pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(
+      source: ImageSource.gallery,
+    );
+
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    widget.imageController.text = await taskSnapshot.ref.getDownloadURL();
+    setState(() {});
+  }
+
+  Future deleteImage() async {
+    setState(() {
+      widget.imageController.text = "";
+    });
+  }
+
+  Future<String> fetchStr() async {
+    if (widget.imageController.text == "")
+      return Future.delayed(
+          Duration(seconds: 3), () => widget.imageController.text);
+    return widget.imageController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,6 +91,39 @@ class _DetailFormState extends State<DetailForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              FutureBuilder<String>(
+                future: fetchStr(),
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    //   return Text('Press button to start.');
+                    case ConnectionState.active:
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    case ConnectionState.done:
+                      if (snapshot.hasError)
+                        return Text('Error: ${snapshot.error}');
+                      else if (snapshot.hasData)
+                        return ItemImage(imgSrc: widget.imageController.text);
+                    // else
+                    //   return Text('Press button to start.');
+                  }
+                  return Text('Something wrong'); // unreachable
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: DefaultButton(
+                  color: ThemeColors.info,
+                  text: "Change Image",
+                  press: () async {
+                    pickImage().then((value) => deleteImage()
+                        .then((value) => uploadImageToFirebase(context)));
+                  },
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
@@ -70,7 +148,7 @@ class _DetailFormState extends State<DetailForm> {
                     if (value.isEmpty) {
                       return "Empty value";
                     }
-                    if(!validCharacters.hasMatch(value)) {
+                    if (!validCharacters.hasMatch(value)) {
                       return "Only number allowed";
                     }
                     return null;

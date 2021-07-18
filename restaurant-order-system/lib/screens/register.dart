@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
 
@@ -94,10 +94,10 @@ class _RegisterState extends State<Register> {
                                                         MainAxisAlignment
                                                             .spaceAround,
                                                     children: [
-                                                      Icon(
-                                                          FontAwesomeIcons
-                                                              .github,
-                                                          size: 13),
+                                                      // Icon(
+                                                      //     FontAwesomeIcons
+                                                      //         .github,
+                                                      //     size: 13),
                                                       SizedBox(
                                                         width: 5,
                                                       ),
@@ -131,10 +131,10 @@ class _RegisterState extends State<Register> {
                                                         MainAxisAlignment
                                                             .spaceAround,
                                                     children: [
-                                                      Icon(
-                                                          FontAwesomeIcons
-                                                              .facebook,
-                                                          size: 13),
+                                                      // Icon(
+                                                      //     FontAwesomeIcons
+                                                      //         .facebook,
+                                                      //     size: 13),
                                                       SizedBox(
                                                         width: 5,
                                                       ),

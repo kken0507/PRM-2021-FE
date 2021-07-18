@@ -28,6 +28,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
   var _genderController = new TextEditingController();
   var _dobController = new TextEditingController();
   var _passController = new TextEditingController();
+  var _imageController = new TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   var img =
@@ -46,6 +47,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       if (acc != null) {
+        acc.avatar = _imageController.text.trim();
         acc.email = _emailController.text.trim();
         acc.role = _roleController.text.trim();
         acc.active = _activeController.text.trim().toLowerCase() == "true";
@@ -63,8 +65,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
         Account newAcc = new Account(
             id: null,
             active: _activeController.text.trim().toLowerCase() == "true",
-            avatar:
-                "https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
+            avatar: _imageController.text.trim(),
             dob: DateTime.parse(_dobController.text.trim()),
             email: _emailController.text.trim(),
             fullname: _fullnameController.text.trim(),
@@ -113,6 +114,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
         _dobController.text = acc.dob.toString().substring(0, 10);
       }
       if (acc.avatar != null && acc.avatar.trim().isNotEmpty) {
+        _imageController.text = acc.avatar;
         setState(() {
           img = acc.avatar;
         });
@@ -128,7 +130,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         children: [
-          AccountImage(imgSrc: img),
+          // AccountImage(imgSrc: img),
           if (acc != null)
             DetailForm(
               emailController: _emailController,
@@ -138,6 +140,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
               genderController: _genderController,
               phoneController: _phoneController,
               roleController: _roleController,
+              imageController: _imageController,
               formKey: _formKey,
             ),
           if (acc == null)
@@ -150,6 +153,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
               phoneController: _phoneController,
               roleController: _roleController,
               passwordController: _passController,
+              imageController: _imageController,
               formKey: _formKey,
             ),
         ]);

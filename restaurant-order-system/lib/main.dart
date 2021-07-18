@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kiennt_restaurant/models/shopping_cart.dart';
 import 'package:kiennt_restaurant/screens/account_management/account_management.dart';
@@ -32,12 +33,18 @@ import 'package:kiennt_restaurant/screens/menu/menu.dart';
 import 'package:kiennt_restaurant/screens/setting/setting.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+// void main() => runApp(MyApp());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
+    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

@@ -16,7 +16,7 @@ class ThemeColors {
   static const Color label = Color.fromRGBO(254, 36, 114, 1.0);
 
   // static const Color info = Color.fromRGBO(17, 205, 239, 1.0);
-  static const Color info = Color.fromRGBO(255, 179, 128, 1.0);
+  static const Color info = Color.fromRGBO(204, 102, 0, 1.0);
 
   static const Color error = Color.fromRGBO(245, 54, 92, 1.0);
 

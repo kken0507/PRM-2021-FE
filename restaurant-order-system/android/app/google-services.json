@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "228355601019",
+    "project_id": "kiennt-restaurant",
+    "storage_bucket": "kiennt-restaurant.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228355601019:android:85dfef51ccc780677e28de",
+        "android_client_info": {
+          "package_name": "com.example.kiennt_restaurant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228355601019-ha40281b1boqd228d3q2i98260c4ajib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYjyhX05w5bt3HiDG7hcgCvOH6QwNJxIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228355601019-ha40281b1boqd228d3q2i98260c4ajib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

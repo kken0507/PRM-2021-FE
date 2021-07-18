@@ -50,7 +50,8 @@ class _CreateFormState extends State<CreateForm> {
       setState(() {
         _flag = widget.activeController.text.toLowerCase() == "true";
         _currentSelectedGender = widget.genderController.text;
-        _currentSelectedRole = widget.roleController.text;
+        // _currentSelectedRole = widget.roleController.text;
+        _currentSelectedRole = MY_ROLES.STAFF.toString().split(".").last;
       });
     });
     super.initState();
@@ -223,8 +224,8 @@ class _CreateFormState extends State<CreateForm> {
                   ),
                 ),
               ),
-              if (!(_currentSelectedRole !=
-                  MY_ROLES.MANAGER.toString().split('.').last))
+              // if (!(_currentSelectedRole !=
+              //     MY_ROLES.MANAGER.toString().split('.').last))
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                   child: TextFormField(
@@ -235,56 +236,55 @@ class _CreateFormState extends State<CreateForm> {
                       return null;
                     },
                     controller: widget.roleController,
-                    readOnly: widget.roleController.text ==
-                        MY_ROLES.MANAGER.toString().split('.').last,
+                    readOnly: true,
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                       labelText: 'Role:',
                     ),
                   ),
                 ),
-              if (_currentSelectedRole !=
-                  MY_ROLES.MANAGER.toString().split('.').last)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: FormField<String>(
-                    builder: (FormFieldState<String> state) {
-                      return InputDecorator(
-                        decoration: InputDecoration(
-                          // labelStyle: TextStyle(
-                          //     color: Colors.redAccent, fontSize: 20.0),
-                          errorStyle: TextStyle(
-                              color: Colors.redAccent, fontSize: 16.0),
-                          labelText: 'Role:',
-                          hintText: 'Please select...',
-                          // border: OutlineInputBorder(
-                          //     borderRadius: BorderRadius.circular(5.0))
-                          border: UnderlineInputBorder(),
-                        ),
-                        isEmpty: _currentSelectedRole == '',
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: _currentSelectedRole,
-                            isDense: true,
-                            onChanged: (String newValue) {
-                              setState(() {
-                                _currentSelectedRole = newValue;
-                                widget.roleController.text = newValue;
-                                state.didChange(newValue);
-                              });
-                            },
-                            items: _roles.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              // if (_currentSelectedRole !=
+              //     MY_ROLES.MANAGER.toString().split('.').last)
+              //   Padding(
+              //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              //     child: FormField<String>(
+              //       builder: (FormFieldState<String> state) {
+              //         return InputDecorator(
+              //           decoration: InputDecoration(
+              //             // labelStyle: TextStyle(
+              //             //     color: Colors.redAccent, fontSize: 20.0),
+              //             errorStyle: TextStyle(
+              //                 color: Colors.redAccent, fontSize: 16.0),
+              //             labelText: 'Role:',
+              //             hintText: 'Please select...',
+              //             // border: OutlineInputBorder(
+              //             //     borderRadius: BorderRadius.circular(5.0))
+              //             border: UnderlineInputBorder(),
+              //           ),
+              //           isEmpty: _currentSelectedRole == '',
+              //           child: DropdownButtonHideUnderline(
+              //             child: DropdownButton<String>(
+              //               value: _currentSelectedRole,
+              //               isDense: true,
+              //               onChanged: (String newValue) {
+              //                 setState(() {
+              //                   _currentSelectedRole = newValue;
+              //                   widget.roleController.text = newValue;
+              //                   state.didChange(newValue);
+              //                 });
+              //               },
+              //               items: _roles.map((String value) {
+              //                 return DropdownMenuItem<String>(
+              //                   value: value,
+              //                   child: Text(value),
+              //                 );
+              //               }).toList(),
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(

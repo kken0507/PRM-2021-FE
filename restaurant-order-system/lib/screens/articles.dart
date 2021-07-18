@@ -247,7 +247,7 @@ class Articles extends StatelessWidget {
                           )),
                         ]),
                   ),
-                  ProductCarousel(imgArray: articlesCards["Music"]["products"]),
+                  // ProductCarousel(imgArray: articlesCards["Music"]["products"]),
                 ],
               ),
             )));

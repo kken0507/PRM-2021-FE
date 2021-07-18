@@ -14,7 +14,7 @@ import 'package:kiennt_restaurant/screens/setting/setting.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/services/storage/local_storage.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
 
@@ -25,14 +25,14 @@ class ArgonDrawer extends StatelessWidget {
 
   ArgonDrawer({this.currentPage});
 
-  _launchURL() async {
-    const url = 'https://example.com';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  // _launchURL() async {
+  //   const url = 'https://example.com';
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   Widget _buildChildFuture(context, curPage, routeName, icon, future) {
     return FutureBuilder(

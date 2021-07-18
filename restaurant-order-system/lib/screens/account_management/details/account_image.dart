@@ -16,7 +16,7 @@ class _AccountImageState extends State<AccountImage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Image.network(
-      widget.imgSrc ??
+      (widget.imgSrc != null && widget.imgSrc.isNotEmpty) ? widget.imgSrc :
           "https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
       height: size.height * 0.4,
       width: double.infinity,

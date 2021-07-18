@@ -1,17 +1,17 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 import 'package:kiennt_restaurant/constants/Theme.dart';
 
 class Pro extends StatelessWidget {
   _launchURL() async {
-    const url = 'https://creative-tim.com';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+    // const url = 'https://creative-tim.com';
+    // if (await canLaunch(url)) {
+    //   await launch(url);
+    // } else {
+    //   throw 'Could not launch $url';
+    // }
   }
 
   @override

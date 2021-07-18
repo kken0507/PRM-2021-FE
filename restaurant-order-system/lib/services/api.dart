@@ -119,7 +119,6 @@ class MyApi {
     if (response.statusCode == 200) {
       return true;
     } else {
-      print(jsonDecode(response.body)["message"]);
       // return false;
       return jsonDecode(response.body)["message"].toString();
     }

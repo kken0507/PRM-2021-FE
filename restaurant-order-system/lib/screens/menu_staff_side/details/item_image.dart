@@ -16,7 +16,7 @@ class _ItemImageState extends State<ItemImage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Image.network(
-      widget.imgSrc ??
+      (widget.imgSrc != null && widget.imgSrc.isNotEmpty) ? widget.imgSrc :
           "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg",
       height: size.height * 0.4,
       width: double.infinity,

@@ -55,7 +55,7 @@ class _LoginState extends State<Login> {
       if ((_apiResponse.ApiError as ApiError) == null) {
         _redirectToHome();
       } else {
-        showInSnackBar((_apiResponse.ApiError as ApiError).message);
+        showInSnackBar((_apiResponse.ApiError as ApiError).message ?? "Server not responding");
       }
     }
   }

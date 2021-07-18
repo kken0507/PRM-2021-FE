@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kiennt_restaurant/models/cart_item.dart';
 
 import 'package:kiennt_restaurant/configs/size_config.dart';

@@ -3,7 +3,6 @@ import 'package:kiennt_restaurant/configs/size_config.dart';
 import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/models/item.dart';
 import 'package:kiennt_restaurant/screens/menu_staff_side/details/detail_form.dart';
-import 'package:kiennt_restaurant/screens/menu_staff_side/details/item_image.dart';
 import 'package:kiennt_restaurant/services/api.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
 import 'package:kiennt_restaurant/widgets/default_button.dart';
@@ -58,7 +57,6 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
     final FormState form = _formKey.currentState;
     if (form.validate()) {
       if (item != null) {
-        print(_imageController.text.trim());
         item.img = _imageController.text.trim();
         item.name = _nameController.text.trim();
         item.price = double.parse(_priceController.text.trim());
@@ -75,7 +73,7 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
             id: null,
             available: _statusController.text.trim().toLowerCase() == "true",
             description: _descriptionController.text.trim(),
-            img: img,
+            img: _imageController.text.trim(),
             name: _nameController.text.trim(),
             price: double.parse(_priceController.text.trim()));
         MyApi().createItem(newItem).then((value) => {

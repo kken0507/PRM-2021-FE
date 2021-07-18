@@ -1,6 +1,14 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:kiennt_restaurant/constants/Theme.dart';
 import 'package:kiennt_restaurant/constants/my_const.dart';
+import 'package:kiennt_restaurant/screens/account_management/details/account_image.dart';
 import 'package:kiennt_restaurant/util/my_util.dart';
+import 'package:kiennt_restaurant/widgets/default_button.dart';
+import 'package:path/path.dart';
 
 class CreateForm extends StatefulWidget {
   const CreateForm({
@@ -13,6 +21,7 @@ class CreateForm extends StatefulWidget {
     this.genderController,
     this.dobController,
     this.passwordController,
+    this.imageController,
     this.formKey,
   }) : super(key: key);
   final TextEditingController emailController;
@@ -23,6 +32,7 @@ class CreateForm extends StatefulWidget {
   final TextEditingController genderController;
   final TextEditingController dobController;
   final TextEditingController passwordController;
+  final TextEditingController imageController;
   final GlobalKey<FormState> formKey;
 
   @override
@@ -33,8 +43,9 @@ class _CreateFormState extends State<CreateForm> {
   bool _flag = false;
   var _currentSelectedGender = MyConst.genders[0];
   var _currentSelectedRole = MyConst.roles[1];
+  File _imageFile;
 
-  void _handleCheckbox(bool e) {
+  void _handleCheckbox(bool e, context) {
     if (_currentSelectedRole != MY_ROLES.MANAGER.toString().split('.').last) {
       setState(() {
         _flag = e;
@@ -57,6 +68,40 @@ class _CreateFormState extends State<CreateForm> {
     super.initState();
   }
 
+  Future pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(
+      source: ImageSource.gallery,
+    );
+
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
+  }
+
+  Future uploadImageToFirebase(BuildContext context) async {
+    String fileName = basename(_imageFile.path);
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    UploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    widget.imageController.text = await taskSnapshot.ref.getDownloadURL();
+    setState(() {});
+  }
+
+  Future deleteImage() async {
+    setState(() {
+      widget.imageController.text = "";
+    });
+  }
+
+  Future<String> fetchStr() async {
+    if (widget.imageController.text == "")
+      return Future.delayed(
+          Duration(seconds: 3), () => widget.imageController.text);
+    return widget.imageController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     var _genders = MyConst.genders;
@@ -68,6 +113,39 @@ class _CreateFormState extends State<CreateForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              FutureBuilder<String>(
+                future: fetchStr(),
+                builder: (context, AsyncSnapshot<String> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    //   return Text('Press button to start.');
+                    case ConnectionState.active:
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    case ConnectionState.done:
+                      if (snapshot.hasError)
+                        return Text('Error: ${snapshot.error}');
+                      else if (snapshot.hasData)
+                        return AccountImage(imgSrc: widget.imageController.text);
+                    // else
+                    //   return Text('Press button to start.');
+                  }
+                  return Text('Something wrong'); // unreachable
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: DefaultButton(
+                  color: ThemeColors.info,
+                  text: "Change Image",
+                  press: () async {
+                    pickImage().then((value) => deleteImage()
+                        .then((value) => uploadImageToFirebase(context)));
+                  },
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
@@ -175,7 +253,7 @@ class _CreateFormState extends State<CreateForm> {
                     if (value.length < 4)
                       return "Must be at least 4 characters in length";
                     // if (value.length < 8)
-                      // return "Must be at least 8 characters in length";
+                    // return "Must be at least 8 characters in length";
                     // Pattern pattern =
                     //     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
                     // RegExp regex = new RegExp(pattern);
@@ -226,23 +304,23 @@ class _CreateFormState extends State<CreateForm> {
               ),
               // if (!(_currentSelectedRole !=
               //     MY_ROLES.MANAGER.toString().split('.').last))
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return "Empty value";
-                      }
-                      return null;
-                    },
-                    controller: widget.roleController,
-                    readOnly: true,
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'Role:',
-                    ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return "Empty value";
+                    }
+                    return null;
+                  },
+                  controller: widget.roleController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Role:',
                   ),
                 ),
+              ),
               // if (_currentSelectedRole !=
               //     MY_ROLES.MANAGER.toString().split('.').last)
               //   Padding(
@@ -319,7 +397,7 @@ class _CreateFormState extends State<CreateForm> {
                 child: CheckboxListTile(
                   title: Text("Active"),
                   value: _flag,
-                  onChanged: _handleCheckbox,
+                  onChanged: (value) => _handleCheckbox(value, context),
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
               ),

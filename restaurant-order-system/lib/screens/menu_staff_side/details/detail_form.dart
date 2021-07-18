@@ -95,9 +95,9 @@ class _DetailFormState extends State<DetailForm> {
                 future: fetchStr(),
                 builder: (context, AsyncSnapshot<String> snapshot) {
                   switch (snapshot.connectionState) {
-                    // case ConnectionState.none:
+                    case ConnectionState.none:
                     //   return Text('Press button to start.');
-                    // case ConnectionState.active:
+                    case ConnectionState.active:
                     case ConnectionState.waiting:
                       return Center(
                         child: CircularProgressIndicator(),
@@ -113,7 +113,6 @@ class _DetailFormState extends State<DetailForm> {
                   return Text('Something wrong'); // unreachable
                 },
               ),
-              // ItemImage(imgSrc: widget.imageController.text),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: DefaultButton(

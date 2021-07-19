@@ -261,7 +261,7 @@ class _CreateFormState extends State<CreateForm> {
                     //   return 'Should contain at least 1 upper-case, 1 lower-case, 1 digit, 1 special-character';
                     Pattern pattern = r"\s+";
                     RegExp regex = new RegExp(pattern);
-                    if (value.trim().contains(regex)) {
+                    if (value.contains(regex)) {
                       return 'Password can\'t contain whitespaces';
                     }
                     return null;

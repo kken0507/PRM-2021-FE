@@ -15,13 +15,22 @@ class _AccountImageState extends State<AccountImage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Image.network(
-      (widget.imgSrc != null && widget.imgSrc.isNotEmpty) ? widget.imgSrc :
-          "https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
-      height: size.height * 0.4,
-      width: double.infinity,
-      // it cover the 25% of total height
-      fit: BoxFit.fill,
-    );
+    if (widget.imgSrc != null && widget.imgSrc == "N/A")
+      return Image.asset(
+        "assets/images/no-user-profile-picture.jpg", height: size.height * 0.4,
+        width: double.infinity,
+        // it cover the 25% of total height
+        fit: BoxFit.fill,
+      );
+    else
+      return Image.network(
+        (widget.imgSrc != null && widget.imgSrc.isNotEmpty)
+            ? widget.imgSrc
+            : "https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg",
+        height: size.height * 0.4,
+        width: double.infinity,
+        // it cover the 25% of total height
+        fit: BoxFit.fill,
+      );
   }
 }

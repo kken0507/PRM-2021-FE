@@ -15,13 +15,22 @@ class _ItemImageState extends State<ItemImage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Image.network(
-      (widget.imgSrc != null && widget.imgSrc.isNotEmpty) ? widget.imgSrc :
-          "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg",
-      height: size.height * 0.4,
-      width: double.infinity,
-      // it cover the 25% of total height
-      fit: BoxFit.fill,
-    );
+    if (widget.imgSrc != null && widget.imgSrc == "N/A")
+      return Image.asset(
+        "assets/images/No-image-found.jpg", height: size.height * 0.4,
+        width: double.infinity,
+        // it cover the 25% of total height
+        fit: BoxFit.fill,
+      );
+    else
+      return Image.network(
+        (widget.imgSrc != null && widget.imgSrc.isNotEmpty)
+            ? widget.imgSrc
+            : "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg",
+        height: size.height * 0.4,
+        width: double.infinity,
+        // it cover the 25% of total height
+        fit: BoxFit.fill,
+      );
   }
 }

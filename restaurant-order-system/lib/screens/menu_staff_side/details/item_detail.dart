@@ -73,7 +73,7 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
             id: null,
             available: _statusController.text.trim().toLowerCase() == "true",
             description: _descriptionController.text.trim(),
-            img: _imageController.text.trim(),
+            img: _imageController.text.trim() == "N/A" ? "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg" : _imageController.text.trim(),
             name: _nameController.text.trim(),
             price: double.parse(_priceController.text.trim()));
         MyApi().createItem(newItem).then((value) => {
@@ -112,6 +112,8 @@ class _ItemDetailStaffScreenState extends State<ItemDetailStaffScreen> {
           img = item.img;
         });
       }
+    } else {
+      _imageController.text = "N/A";
     }
   }
 

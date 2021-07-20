@@ -65,7 +65,9 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
         Account newAcc = new Account(
             id: null,
             active: _activeController.text.trim().toLowerCase() == "true",
-            avatar: _imageController.text.trim(),
+            avatar: _imageController.text.trim() == "N/A"
+                ? "https://st2.depositphotos.com/1009634/7235/v/600/depositphotos_72350117-stock-illustration-no-user-profile-picture-hand.jpg"
+                : _imageController.text.trim(),
             dob: DateTime.parse(_dobController.text.trim()),
             email: _emailController.text.trim(),
             fullname: _fullnameController.text.trim(),
@@ -122,6 +124,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
     } else {
       _roleController.text = "STAFF";
       _genderController.text = "M";
+      _imageController.text = "N/A";
     }
   }
 

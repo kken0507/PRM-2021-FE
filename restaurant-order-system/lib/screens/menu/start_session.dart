@@ -19,6 +19,7 @@ class StartSessionScreen extends StatelessWidget {
     return Scaffold(
         appBar: Navbar(
           title: "Start session",
+          rightOptionCart: false,
         ),
         backgroundColor: ThemeColors.bgColorScreen,
         // key: _scaffoldKey,
